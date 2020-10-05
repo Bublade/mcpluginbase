@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/developer-tools/developer-tools.iml" filepath="$PROJECT_DIR$/developer-tools/developer-tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mcpluginbase/mcpluginbase.iml" filepath="$PROJECT_DIR$/mcpluginbase/mcpluginbase.iml" />
+    </modules>
+  </component>
+</project>
