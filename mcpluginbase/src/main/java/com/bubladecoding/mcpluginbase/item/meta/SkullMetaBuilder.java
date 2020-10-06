@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SkullMetaBuilder extends BaseMetaBuilder<SkullMeta, SkullMetaBuilder> {
 
-    protected SkullMetaBuilder(ItemBuilder itemBuilder) {
+    public SkullMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, SkullMeta.class, SkullMetaBuilder.class);
     }
 

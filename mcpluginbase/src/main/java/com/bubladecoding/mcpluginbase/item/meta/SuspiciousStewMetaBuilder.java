@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SuspiciousStewMetaBuilder extends BaseMetaBuilder<SuspiciousStewMeta, SuspiciousStewMetaBuilder> {
 
-    protected SuspiciousStewMetaBuilder(ItemBuilder itemBuilder) {
+    public SuspiciousStewMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, SuspiciousStewMeta.class, SuspiciousStewMetaBuilder.class);
     }
 

@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BlockDataMetaBuilder extends BaseMetaBuilder<BlockDataMeta, BlockDataMetaBuilder> {
 
-    protected BlockDataMetaBuilder(ItemBuilder itemBuilder) {
+    public BlockDataMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, BlockDataMeta.class, BlockDataMetaBuilder.class);
     }
 

@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class BookMetaBuilder extends BaseMetaBuilder<BookMeta, BookMetaBuilder> {
 
-    protected BookMetaBuilder(ItemBuilder itemBuilder) {
+    public BookMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, BookMeta.class, BookMetaBuilder.class);
     }
 

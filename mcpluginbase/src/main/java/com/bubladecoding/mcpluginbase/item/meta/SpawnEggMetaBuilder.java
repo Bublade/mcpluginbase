@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Contract;
  */
 public class SpawnEggMetaBuilder extends BaseMetaBuilder<SpawnEggMeta, SpawnEggMetaBuilder> {
 
-    protected SpawnEggMetaBuilder(ItemBuilder itemBuilder) {
+    public SpawnEggMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, SpawnEggMeta.class, SpawnEggMetaBuilder.class);
     }
 

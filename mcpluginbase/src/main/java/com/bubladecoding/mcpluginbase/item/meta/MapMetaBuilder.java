@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class MapMetaBuilder extends BaseMetaBuilder<MapMeta, MapMetaBuilder> {
 
-    protected MapMetaBuilder(ItemBuilder itemBuilder) {
+    public MapMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, MapMeta.class, MapMetaBuilder.class);
     }
 

@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class CrossbowMetaBuilder extends BaseMetaBuilder<CrossbowMeta, CrossbowMetaBuilder> {
 
-    protected CrossbowMetaBuilder(ItemBuilder itemBuilder) {
+    public CrossbowMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, CrossbowMeta.class, CrossbowMetaBuilder.class);
     }
 

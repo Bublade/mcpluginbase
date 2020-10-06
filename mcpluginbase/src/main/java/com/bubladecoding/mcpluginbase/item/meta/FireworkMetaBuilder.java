@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FireworkMetaBuilder extends BaseMetaBuilder<FireworkMeta, FireworkMetaBuilder> {
 
-    protected FireworkMetaBuilder(ItemBuilder itemBuilder) {
+    public FireworkMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, FireworkMeta.class, FireworkMetaBuilder.class);
     }
 

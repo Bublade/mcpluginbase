@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class BannerMetaBuilder extends BaseMetaBuilder<BannerMeta, BannerMetaBuilder> {
 
-    protected BannerMetaBuilder(ItemBuilder itemBuilder) {
+    public BannerMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, BannerMeta.class, BannerMetaBuilder.class);
     }
 

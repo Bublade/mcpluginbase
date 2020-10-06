@@ -1,7 +1,7 @@
 package com.bubladecoding.developertools;
 
 import com.bubladecoding.developertools.commands.GimmeCommand;
-import com.bubladecoding.developertools.commands.test.TestCommand;
+import com.bubladecoding.developertools.commands.TestCommand;
 import com.bubladecoding.developertools.events.MobEvents;
 import com.bubladecoding.mcpluginbase.McPluginBase;
 

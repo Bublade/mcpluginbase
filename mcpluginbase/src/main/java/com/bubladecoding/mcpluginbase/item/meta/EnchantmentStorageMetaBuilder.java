@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EnchantmentStorageMetaBuilder extends BaseMetaBuilder<EnchantmentStorageMeta, EnchantmentStorageMetaBuilder> {
 
-    protected EnchantmentStorageMetaBuilder(ItemBuilder itemBuilder) {
+    public EnchantmentStorageMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, EnchantmentStorageMeta.class, EnchantmentStorageMetaBuilder.class);
     }
 

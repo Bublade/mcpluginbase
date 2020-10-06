@@ -30,7 +30,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class ItemMetaBuilder extends BaseMetaBuilder<ItemMeta, ItemMetaBuilder> {
 
-    protected ItemMetaBuilder(ItemBuilder itemBuilder) {
+    public ItemMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, ItemMeta.class, ItemMetaBuilder.class);
     }
 }

@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CompassMetaBuilder extends BaseMetaBuilder<CompassMeta, CompassMetaBuilder> {
 
-    protected CompassMetaBuilder(ItemBuilder itemBuilder) {
+    public CompassMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, CompassMeta.class, CompassMetaBuilder.class);
     }
 

@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TropicalFishBucketMetaBuilder extends BaseMetaBuilder<TropicalFishBucketMeta, TropicalFishBucketMetaBuilder> {
 
-    protected TropicalFishBucketMetaBuilder(ItemBuilder itemBuilder) {
+    public TropicalFishBucketMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, TropicalFishBucketMeta.class, TropicalFishBucketMetaBuilder.class);
     }
 

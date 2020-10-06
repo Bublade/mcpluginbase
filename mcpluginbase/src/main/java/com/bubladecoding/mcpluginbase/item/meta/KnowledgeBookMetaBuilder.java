@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class KnowledgeBookMetaBuilder extends BaseMetaBuilder<KnowledgeBookMeta, KnowledgeBookMetaBuilder> {
 
-    protected KnowledgeBookMetaBuilder(ItemBuilder itemBuilder) {
+    public KnowledgeBookMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, KnowledgeBookMeta.class, KnowledgeBookMetaBuilder.class);
     }
 

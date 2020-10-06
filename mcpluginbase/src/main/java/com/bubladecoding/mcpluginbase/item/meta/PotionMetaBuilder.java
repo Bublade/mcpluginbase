@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PotionMetaBuilder extends BaseMetaBuilder<PotionMeta, PotionMetaBuilder> {
 
-    protected PotionMetaBuilder(ItemBuilder itemBuilder) {
+    public PotionMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, PotionMeta.class, PotionMetaBuilder.class);
     }
 

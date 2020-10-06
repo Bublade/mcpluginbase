@@ -41,7 +41,7 @@ import java.util.List;
  */
 public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<T, V>> extends MetaBuilder<T, V> {
 
-    protected BaseMetaBuilder(ItemBuilder itemBuilder, Class<T> metaClass, Class<V> builderClass) {
+    public BaseMetaBuilder(ItemBuilder itemBuilder, Class<T> metaClass, Class<V> builderClass) {
         super(itemBuilder, metaClass, builderClass);
     }
 

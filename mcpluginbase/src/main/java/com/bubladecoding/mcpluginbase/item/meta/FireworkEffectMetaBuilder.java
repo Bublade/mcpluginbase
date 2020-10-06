@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class FireworkEffectMetaBuilder extends BaseMetaBuilder<FireworkEffectMeta, FireworkEffectMetaBuilder> {
 
-    protected FireworkEffectMetaBuilder(ItemBuilder itemBuilder) {
+    public FireworkEffectMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, FireworkEffectMeta.class, FireworkEffectMetaBuilder.class);
     }
 

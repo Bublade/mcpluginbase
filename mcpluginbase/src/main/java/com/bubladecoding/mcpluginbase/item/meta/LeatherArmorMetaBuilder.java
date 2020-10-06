@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class LeatherArmorMetaBuilder extends BaseMetaBuilder<LeatherArmorMeta, LeatherArmorMetaBuilder> {
 
-    protected LeatherArmorMetaBuilder(ItemBuilder itemBuilder) {
+    public LeatherArmorMetaBuilder(ItemBuilder itemBuilder) {
         super(itemBuilder, LeatherArmorMeta.class, LeatherArmorMetaBuilder.class);
     }
 
