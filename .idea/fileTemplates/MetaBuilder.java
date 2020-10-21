@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.${META_CLASS};
  */
 public class ${NAME} extends MetaBuilder<${META_CLASS}, ${NAME}> {
 
-    protected ${NAME}(ItemBuilder itemBuilder) {
+    public ${NAME}(ItemBuilder itemBuilder) {
         super(itemBuilder, ${META_CLASS}.class, ${NAME}.class);
     }
 }

@@ -21,6 +21,7 @@ package com.bubladecoding.mcpluginbase.item;
  * SOFTWARE.
  */
 
+import com.bubladecoding.mcpluginbase.item.meta.ItemMetaBuilder;
 import com.bubladecoding.mcpluginbase.item.meta.MetaBuilder;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -50,8 +51,8 @@ public class ItemBuilder {
     }
 
     /**
-     * Constructor for a new {@link ItemStack} based on the givien {@link Material}.
-     * @param material The {@link Material} type of the itemstack
+     * Constructor for a new {@link ItemStack} based on the given {@link Material}.
+     * @param material The {@link Material} type of the ItemStack
      */
     public ItemBuilder(Material material) {
         this.stack = new ItemStack(material);
@@ -258,6 +259,10 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemMetaBuilder editMeta() {
+        return new ItemMetaBuilder(this);
+    }
+
     /**
      * Edit the {@link ItemMeta} with a custom {@link MetaBuilder}.
      *
@@ -281,13 +286,6 @@ public class ItemBuilder {
      */
     public ItemStack build() {
         return stack;
-    }
-
-    private ItemBuilder addMeta(Consumer<ItemMeta> meta) {
-        ItemMeta im = this.stack.getItemMeta();
-        meta.accept(im);
-        stack.setItemMeta(im);
-        return this;
     }
 
 }

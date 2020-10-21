@@ -22,6 +22,7 @@ package com.bubladecoding.mcpluginbase.item.meta;
  */
 
 import com.bubladecoding.mcpluginbase.item.ItemBuilder;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.inventory.meta.BookMeta;
 
 import java.util.List;
@@ -106,5 +107,17 @@ public class BookMetaBuilder extends BaseMetaBuilder<BookMeta, BookMetaBuilder> 
      */
     public BookMetaBuilder setTitle(String title) {
         return editMeta(meta -> meta.setTitle(title));
+    }
+
+    public BookMetaBuilder setBaseComponentPages(List<BaseComponent[]> pages) {
+        return editMeta(meta -> meta.spigot().setPages(pages));
+    }
+
+    public BookMetaBuilder setPages(BaseComponent[]... pages) {
+        return editMeta(meta -> meta.spigot().setPages(pages));
+    }
+
+    public BookMetaBuilder setPage(int page, BaseComponent... data) {
+        return editMeta(meta -> meta.spigot().setPage(page, data));
     }
 }

@@ -25,6 +25,7 @@ import com.bubladecoding.mcpluginbase.item.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public abstract class MetaBuilder<T extends ItemMeta, V extends MetaBuilder<T, V>> {
@@ -39,9 +40,10 @@ public abstract class MetaBuilder<T extends ItemMeta, V extends MetaBuilder<T, V
 
         this.stack = itemBuilder.build();
         if (!metaClass.isInstance(stack.getItemMeta())) {
+            String itemMetaType = Objects.requireNonNull(stack.getItemMeta()).getClass().getSimpleName();
             throw new ClassCastException(
                     "MetaBuilder expected an item with the ItemMeta type '" + metaClass.getSimpleName() + "' " +
-                            "but got an Item with MetaType '" + stack.getItemMeta().getClass().getSimpleName() + "' instead."
+                            "but got an Item with MetaType '" + itemMetaType + "' instead."
             );
         }
 
@@ -52,6 +54,11 @@ public abstract class MetaBuilder<T extends ItemMeta, V extends MetaBuilder<T, V
     public ItemBuilder buildMeta() {
         stack.setItemMeta(this.itemMeta);
         return new ItemBuilder(stack);
+    }
+
+    public ItemStack build() {
+        stack.setItemMeta(this.itemMeta);
+        return stack;
     }
 
     protected V editMeta(Consumer<T> meta) {
