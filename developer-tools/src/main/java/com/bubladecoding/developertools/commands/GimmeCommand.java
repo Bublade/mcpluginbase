@@ -22,86 +22,49 @@
 package com.bubladecoding.developertools.commands;
 
 import com.bubladecoding.mcpluginbase.command.CommandBase;
-import com.bubladecoding.mcpluginbase.command.argument.Arguments;
+import com.bubladecoding.mcpluginbase.command.annotations.Argument;
+import com.bubladecoding.mcpluginbase.command.annotations.CommandExecutor;
 import com.bubladecoding.mcpluginbase.command.interfaces.CommandSender;
+import com.bubladecoding.mcpluginbase.command.tabcompleter.MaterialTabCompleter;
+import com.bubladecoding.mcpluginbase.command.tabcompleter.PlayerTabCompleter;
+import com.bubladecoding.mcpluginbase.parsing.parses.IntParser;
+import com.bubladecoding.mcpluginbase.parsing.parses.MaterialParser;
+import com.bubladecoding.mcpluginbase.parsing.parses.PlayerParser;
+
 import org.bukkit.Material;
 import org.bukkit.command.Command;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class GimmeCommand extends CommandBase {
 
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull Arguments arguments) {
-        if (arguments.size() == 0) {
-            return Arrays.asList("1", "2", "4", "8", "16", "32", "64");
-        }
-
-        String lastArg = arguments.get(arguments.size());
-        if (arguments.getInteger(1) != null) {
-            final List<String> suggestions = Arrays.asList("1", "2", "4", "8", "16", "32", "64");
-            final List<String> completions = new ArrayList<>();
-            return StringUtil.copyPartialMatches(lastArg, suggestions, completions);
-        }
-
-        final List<String> suggestions = Arrays.stream(Material.values()).map(Enum::name).map(String::toLowerCase).collect(Collectors.toList());
-        final List<String> completions = new ArrayList<>();
-        return StringUtil.copyPartialMatches(lastArg, suggestions, completions);
-    }
-
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull Arguments arguments) {
-        if (!sender.isPlayer() || !sender.hasPermission("devtools.gimme")) {
-            sender.sendMessage("&cNO!");
-            return true;
-        }
-
-        if (arguments.size() == 0) {
-            return false;
-        }
-
-        Material material = null;
-        Integer amount = null;
-
-        if (arguments.size() == 1) {
-            material = arguments.getMaterial(1);
-        }
-
-        if (arguments.size() == 2) {
-            amount = arguments.getInteger(1);
-            material = arguments.getMaterial(2);
-        }
-
-        if (material == null && amount == null) {
-            amount = arguments.getInteger(2);
-            material = arguments.getMaterial(1);
+    @CommandExecutor
+    public boolean gimme(
+            CommandSender sender,
+            Command command,
+            String[] args,
+            @Argument(name = "material", parser = MaterialParser.class, tabCompleter = MaterialTabCompleter.class) Material material,
+            @Argument(name = "amount", parser = IntParser.class, optional = true) Integer amount,
+            @Argument(name = "to", parser = PlayerParser.class, optional = true, tabCompleter = PlayerTabCompleter.class) Player target
+    ) {
+        sender.getPlayer().updateCommands();
+        if (target == null && sender.isPlayer()) {
+            target = sender.getPlayer();
         }
 
         if (material == null) {
+            material = Material.DIRT;
+        }
+
+        if (target == null) {
             return false;
         }
 
         if (amount == null) {
-            sender.getPlayer().getInventory().addItem(new ItemStack(material));
-            return true;
+            amount = 1;
         }
 
-        if (amount > material.getMaxStackSize()) {
-            int stacks = (int) Math.floor((double) amount / (double) material.getMaxStackSize());
-            int rest = amount % material.getMaxStackSize();
-            for (int i = 0; i < stacks; i++) {
-                sender.getPlayer().getInventory().addItem(new ItemStack(material, material.getMaxStackSize()));
-            }
-            sender.getPlayer().getInventory().addItem(new ItemStack(material, rest));
-            return true;
-        }
-
-        sender.getPlayer().getInventory().addItem(new ItemStack(material, amount));
-        return true;
+        target.getInventory().addItem(new ItemStack(material, amount));
+        return false;
     }
-
 }

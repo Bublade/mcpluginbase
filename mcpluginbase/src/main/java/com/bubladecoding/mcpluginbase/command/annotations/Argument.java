@@ -1,4 +1,3 @@
-package com.bubladecoding.mcpluginbase.parsing.parses;
 /*
  * Copyright (c) 2020 bublade
  *
@@ -20,38 +19,36 @@ package com.bubladecoding.mcpluginbase.parsing.parses;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.mcpluginbase.command.annotations;
 
+import com.bubladecoding.mcpluginbase.command.interfaces.ArgumentTabCompleter;
+import com.bubladecoding.mcpluginbase.command.tabcompleter.NullTabCompleter;
+import com.bubladecoding.mcpluginbase.command.tabcompleter.PlayerTabCompleter;
 import com.bubladecoding.mcpluginbase.parsing.Parser;
-import org.bukkit.Material;
-import org.jetbrains.annotations.Nullable;
+import com.bubladecoding.mcpluginbase.parsing.parses.StringParser;
 
-import java.util.Arrays;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class MaterialParser implements Parser<Material> {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+public @interface Argument {
+    String name();
 
-    @Nullable
-    @Override
-    public Material parse(String arg) {
-        Material material = Material.getMaterial(arg.toUpperCase());
+    String[] aliases() default  {};
 
-        if (material == null && !arg.contains("_")) {
-            material = Arrays.stream(Material.values())
-                    .filter(m -> m.name().replaceAll("_", "").toUpperCase().equals(arg.toUpperCase()))
-                    .findFirst().orElse(null);
-        }
+    /**
+     * Marks an argument as optional, this also means that the parameter can be null.
+     *
+     * @return true if the argument is is optional
+     */
+    boolean optional() default false;
 
-        if (material == null) {
-            // https://stackoverflow.com/a/7594052/5599948
-            String[] args = arg.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])");
-            String value = String.join("_", args).toUpperCase();
-            material = Material.getMaterial(value);
+    boolean multiple() default false;
 
-            if (material == null && value.endsWith("S")) {
-                material = Material.getMaterial(value.substring(0, value.length() - 1));
-            }
-        }
+    Class<? extends Parser<?>> parser() default StringParser.class;
 
-        return material;
-    }
-
+    Class<? extends ArgumentTabCompleter> tabCompleter() default NullTabCompleter.class;
 }

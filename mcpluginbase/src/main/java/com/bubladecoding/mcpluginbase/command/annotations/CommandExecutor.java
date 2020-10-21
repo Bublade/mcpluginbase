@@ -1,4 +1,3 @@
-package com.bubladecoding.mcpluginbase.command.interfaces;
 /*
  * Copyright (c) 2020 bublade
  *
@@ -20,12 +19,16 @@ package com.bubladecoding.mcpluginbase.command.interfaces;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.mcpluginbase.command.annotations;
 
-import com.bubladecoding.mcpluginbase.command.argument.Arguments;
-import org.bukkit.command.Command;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@FunctionalInterface
-public interface SubCommand {
-    boolean onCommand(CommandSender sender, Command command, String label, Arguments arguments);
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface CommandExecutor {
+    boolean subCommand() default false;
+    String name() default "";
 }
-

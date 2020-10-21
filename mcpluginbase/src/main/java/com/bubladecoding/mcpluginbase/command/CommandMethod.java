@@ -1,4 +1,3 @@
-package com.bubladecoding.mcpluginbase.parsing.parses;
 /*
  * Copyright (c) 2020 bublade
  *
@@ -20,38 +19,47 @@ package com.bubladecoding.mcpluginbase.parsing.parses;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.mcpluginbase.command;
 
-import com.bubladecoding.mcpluginbase.parsing.Parser;
-import org.bukkit.Material;
-import org.jetbrains.annotations.Nullable;
-
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 
-public class MaterialParser implements Parser<Material> {
+public class CommandMethod {
 
-    @Nullable
-    @Override
-    public Material parse(String arg) {
-        Material material = Material.getMaterial(arg.toUpperCase());
+    private final Method executor;
+    private final CommandParameter[] parameters;
 
-        if (material == null && !arg.contains("_")) {
-            material = Arrays.stream(Material.values())
-                    .filter(m -> m.name().replaceAll("_", "").toUpperCase().equals(arg.toUpperCase()))
-                    .findFirst().orElse(null);
-        }
-
-        if (material == null) {
-            // https://stackoverflow.com/a/7594052/5599948
-            String[] args = arg.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])");
-            String value = String.join("_", args).toUpperCase();
-            material = Material.getMaterial(value);
-
-            if (material == null && value.endsWith("S")) {
-                material = Material.getMaterial(value.substring(0, value.length() - 1));
-            }
-        }
-
-        return material;
+    CommandMethod(Method executor) {
+        this.executor = executor;
+        this.parameters = Arrays.stream(executor.getParameters())
+                .map(CommandParameter::new)
+                .filter(parameter -> parameter.isArgument() || parameter.isOption())
+                .toArray(CommandParameter[]::new);
     }
 
+    public boolean call(Object caller, Object... args) {
+        try {
+            Object res = executor.invoke(caller, args);
+            if (res instanceof Boolean) {
+                return (Boolean) res;
+            }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public Method getExecutor() {
+        return executor;
+    }
+
+    public CommandParameter[] getParameters() {
+        return parameters;
+    }
+
+    public List<String> complete(String s) {
+        return null;
+    }
 }

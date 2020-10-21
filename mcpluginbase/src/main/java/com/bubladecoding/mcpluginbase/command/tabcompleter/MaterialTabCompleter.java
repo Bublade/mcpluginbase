@@ -1,4 +1,3 @@
-package com.bubladecoding.mcpluginbase.parsing.parses;
 /*
  * Copyright (c) 2020 bublade
  *
@@ -20,38 +19,39 @@ package com.bubladecoding.mcpluginbase.parsing.parses;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.mcpluginbase.command.tabcompleter;
 
-import com.bubladecoding.mcpluginbase.parsing.Parser;
+import com.bubladecoding.mcpluginbase.command.interfaces.ArgumentTabCompleter;
 import org.bukkit.Material;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class MaterialParser implements Parser<Material> {
+public class MaterialTabCompleter implements ArgumentTabCompleter {
 
-    @Nullable
     @Override
-    public Material parse(String arg) {
-        Material material = Material.getMaterial(arg.toUpperCase());
-
-        if (material == null && !arg.contains("_")) {
-            material = Arrays.stream(Material.values())
-                    .filter(m -> m.name().replaceAll("_", "").toUpperCase().equals(arg.toUpperCase()))
-                    .findFirst().orElse(null);
-        }
-
-        if (material == null) {
-            // https://stackoverflow.com/a/7594052/5599948
-            String[] args = arg.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])");
-            String value = String.join("_", args).toUpperCase();
-            material = Material.getMaterial(value);
-
-            if (material == null && value.endsWith("S")) {
-                material = Material.getMaterial(value.substring(0, value.length() - 1));
-            }
-        }
-
-        return material;
+    public List<String> complete(String arg) {
+        return Arrays.stream(Material.values())
+                .filter(material -> include(material, arg))
+                .map(Enum::name)
+                .collect(Collectors.toList());
     }
 
+    private boolean include(Material material, String arg) {
+        String name = material.name();
+        if (name.startsWith(arg.toUpperCase())) {
+            return true;
+        }
+
+        String strippedName = material.name().replaceAll("_", "");
+        if (strippedName.startsWith(arg) || strippedName.contains(arg)) {
+            return true;
+        }
+
+        String[] args = arg.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])");
+        String value = String.join("_", args).toUpperCase();
+
+        return name.startsWith(value) || name.contains(value);
+    }
 }

@@ -19,26 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.bubladecoding.developertools.commands.test;
+package com.bubladecoding.mcpluginbase.command.tabcompleter;
 
-import com.bubladecoding.mcpluginbase.command.argument.Arguments;
-import com.bubladecoding.mcpluginbase.command.interfaces.CommandSender;
-import com.bubladecoding.mcpluginbase.command.interfaces.SubCommand;
-import com.bubladecoding.mcpluginbase.command.interfaces.SubTabCompleter;
-import org.bukkit.command.Command;
+import com.bubladecoding.mcpluginbase.command.interfaces.ArgumentTabCompleter;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class SubCommand4 implements SubCommand, SubTabCompleter {
+public class PlayerTabCompleter implements ArgumentTabCompleter {
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, Arguments arguments) {
-        sender.sendMessage("&aHI! this is the fourth sub command, nested in the second sub command!");
-        return true;
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, Arguments arguments) {
-        return Collections.emptyList();
+    public List<String> complete(String arg) {
+        return Bukkit.getOnlinePlayers().stream().map(Player::getDisplayName).collect(Collectors.toList());
     }
 }

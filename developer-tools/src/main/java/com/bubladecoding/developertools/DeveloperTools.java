@@ -1,7 +1,7 @@
 package com.bubladecoding.developertools;
 
+import com.bubladecoding.developertools.commands.FlyCommand;
 import com.bubladecoding.developertools.commands.GimmeCommand;
-import com.bubladecoding.developertools.commands.TestCommand;
 import com.bubladecoding.developertools.events.MobEvents;
 import com.bubladecoding.mcpluginbase.McPluginBase;
 
@@ -10,8 +10,8 @@ public final class DeveloperTools extends McPluginBase {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        registerTabExecutor("test", new TestCommand());
         registerTabExecutor("gimme", new GimmeCommand());
+        registerCommandExecutor("fly", new FlyCommand());
         getServer().getPluginManager().registerEvents(new MobEvents(), this);
     }
 
