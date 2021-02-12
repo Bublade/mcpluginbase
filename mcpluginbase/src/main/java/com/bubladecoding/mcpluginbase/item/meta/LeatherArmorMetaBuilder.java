@@ -46,8 +46,4 @@ public class LeatherArmorMetaBuilder extends BaseMetaBuilder<LeatherArmorMeta, L
     public LeatherArmorMetaBuilder setColor(@Nullable Color color) {
         return editMeta(meta -> meta.setColor(color));
     }
-
-    public LeatherArmorMetaBuilder doSomething(String test) {
-        return editMeta(meta -> meta.setDisplayName(test));
-    }
 }
