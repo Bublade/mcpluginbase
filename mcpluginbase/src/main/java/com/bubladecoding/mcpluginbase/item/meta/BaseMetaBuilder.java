@@ -24,24 +24,28 @@ package com.bubladecoding.mcpluginbase.item.meta;
 import com.bubladecoding.mcpluginbase.item.ItemBuilder;
 
 import com.google.common.collect.Multimap;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * MetaBuilder class for editing {@link ItemMeta}.
  */
-public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<T, V>> extends MetaBuilder<T, V> {
+public abstract class BaseMetaBuilder<T extends ItemMeta, M extends MetaBuilder<T, M>> extends MetaBuilder<T, M> {
 
-    public BaseMetaBuilder(ItemBuilder itemBuilder, Class<T> metaClass, Class<V> builderClass) {
+    public BaseMetaBuilder(ItemBuilder itemBuilder, Class<T> metaClass, Class<M> builderClass) {
         super(itemBuilder, metaClass, builderClass);
     }
 
@@ -50,7 +54,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @param name the name to set
      */
-    public V setDisplayName(@Nullable String name) {
+    public M setDisplayName(@Nullable String name) {
         return editMeta(meta -> meta.setDisplayName(name));
     }
 
@@ -59,7 +63,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @param name the name to set
      */
-    public V setLocalizedName(@Nullable String name) {
+    public M setLocalizedName(@Nullable String name) {
         return editMeta(meta -> meta.setLocalizedName(name));
     }
 
@@ -69,7 +73,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @param lore the lore that will be set
      */
-    public V setLore(@Nullable List<String> lore) {
+    public M setLore(@Nullable List<String> lore) {
         return editMeta(meta -> meta.setLore(lore));
     }
 
@@ -79,7 +83,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @param lore the lore that will be set
      */
-    public V setLore(@Nullable String... lore) {
+    public M setLore(@Nullable String... lore) {
         return editMeta(meta -> meta.setLore(Arrays.asList(lore)));
     }
 
@@ -91,7 +95,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @param data the data to set, or null to clear
      */
-    public V setCustomModelData(@Nullable Integer data) {
+    public M setCustomModelData(@Nullable Integer data) {
         return editMeta(meta -> meta.setCustomModelData(data));
     }
 
@@ -103,7 +107,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      * @param ignoreLevelRestriction this indicates the enchantment should be
      *     applied, ignoring the level limit
      */
-    public V addEnchantment(@NotNull Enchantment enchantment, int level, boolean ignoreLevelRestriction) {
+    public M addEnchantment(@NotNull Enchantment enchantment, int level, boolean ignoreLevelRestriction) {
         return editMeta(meta -> meta.addEnchant(enchantment, level, ignoreLevelRestriction));
     }
 
@@ -112,7 +116,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @param enchantment Enchantment to remove
      */
-    public V removeEnchantment(@NotNull Enchantment enchantment) {
+    public M removeEnchantment(@NotNull Enchantment enchantment) {
         return editMeta(meta -> meta.removeEnchant(enchantment));
     }
 
@@ -121,7 +125,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @param itemFlags The hideflags which shouldn't be rendered
      */
-    public V addItemFlags(@NotNull ItemFlag... itemFlags) {
+    public M addItemFlags(@NotNull ItemFlag... itemFlags) {
         return editMeta(meta -> meta.addItemFlags(itemFlags));
     }
 
@@ -130,7 +134,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @param itemFlags Hideflags which should be removed
      */
-    public V removeItemFlags(@NotNull ItemFlag... itemFlags) {
+    public M removeItemFlags(@NotNull ItemFlag... itemFlags) {
         return editMeta(meta -> meta.removeItemFlags(itemFlags));
     }
 
@@ -139,7 +143,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @param unbreakable true if set unbreakable
      */
-    public V setUnbreakable(boolean unbreakable) {
+    public M setUnbreakable(boolean unbreakable) {
         return editMeta(meta -> meta.setUnbreakable(unbreakable));
     }
 
@@ -158,7 +162,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      * @throws NullPointerException if AttributeModifier is null
      * @throws IllegalArgumentException if AttributeModifier already exists
      */
-    public V addAttributeModifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier) {
+    public M addAttributeModifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier) {
         return editMeta(meta -> meta.addAttributeModifier(attribute, modifier));
     }
 
@@ -172,7 +176,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      * @param attributeModifiers the new Multimap containing the Attributes
      *                           and their AttributeModifiers
      */
-    public V setAttributeModifiers(@Nullable Multimap<Attribute, AttributeModifier> attributeModifiers) {
+    public M setAttributeModifiers(@Nullable Multimap<Attribute, AttributeModifier> attributeModifiers) {
         return editMeta(meta -> meta.setAttributeModifiers(attributeModifiers));
     }
 
@@ -184,7 +188,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      * @param attribute attribute to remove
      * @throws NullPointerException if Attribute is null
      */
-    public V removeAttributeModifier(@NotNull Attribute attribute) {
+    public M removeAttributeModifier(@NotNull Attribute attribute) {
         return editMeta(meta -> meta.removeAttributeModifier(attribute));
     }
 
@@ -197,7 +201,7 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      * @param slot the {@link EquipmentSlot} to clear all Attributes and
      *             their modifiers for
      */
-    public V removeAttributeModifier(@NotNull EquipmentSlot slot) {
+    public M removeAttributeModifier(@NotNull EquipmentSlot slot) {
         return editMeta(meta -> meta.removeAttributeModifier(slot));
     }
 
@@ -213,7 +217,19 @@ public abstract class BaseMetaBuilder<T extends ItemMeta, V extends MetaBuilder<
      *
      * @see AttributeModifier#getUniqueId()
      */
-    public V removeAttributeModifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier) {
+    public M removeAttributeModifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier) {
         return editMeta(meta -> meta.removeAttributeModifier(attribute, modifier));
+    }
+
+    public M editPersistentData(Consumer<? super PersistentDataContainer> persistentDataConsumer) {
+        return editMeta(meta -> persistentDataConsumer.accept(meta.getPersistentDataContainer()));
+    }
+
+    public <Y, Z> M setPersistentData(@NotNull NamespacedKey key, @NotNull PersistentDataType<Y, Z> type, @NotNull Z value) {
+        return editMeta(meta -> meta.getPersistentDataContainer().set(key, type, value));
+    }
+
+    public <Y, Z> M removePersistentData(@NotNull NamespacedKey key) {
+        return editMeta(meta -> meta.getPersistentDataContainer().remove(key));
     }
 }

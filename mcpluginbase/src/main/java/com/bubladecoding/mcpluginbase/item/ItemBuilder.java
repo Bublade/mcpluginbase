@@ -41,6 +41,7 @@ import java.util.function.Consumer;
 public class ItemBuilder {
 
     private final ItemStack stack;
+    private boolean dirty;
 
     /**
      * Constructor for an all clean {@link ItemStack}.
@@ -56,6 +57,7 @@ public class ItemBuilder {
      */
     public ItemBuilder(Material material) {
         this.stack = new ItemStack(material);
+        this.dirty = true;
     }
 
     /**
@@ -203,7 +205,7 @@ public class ItemBuilder {
      *
      * @param durability Durability of this item
      * @deprecated durability is now part of ItemMeta. To avoid confusion and
-     * misuse, {@link #editMeta(Class)}, {@link #editItemMeta(Class, Consumer)},
+     * misuse, {@link #editMeta(Class)}, {@link #editItemMeta(Consumer)},
      * and {@link Damageable#setDamage(int)} should be used instead. This is because
      * any call to this method will be overwritten by subsequent setting of
      * ItemMeta which was created before this call.
@@ -229,36 +231,39 @@ public class ItemBuilder {
     }
 
     /**
-     * Method for editing the item meta.
+     * Method for editing the item meta with a specific type.
      *
-     * @param meta {@link Consumer} for editing the meta.
+     * <pre>
+     *     ItemStack leatherHelmet = new ItemBuilder(Material.LEATHER_HELMET)
+     *         .editItemMeta((LeatherArmorMeta meta) -> meta.setColor(Color.FUCHSIA))
+     *         .build();
+     * </pre>
+     *
+     * @param metaConsumer {@link Consumer} for editing the meta.
      * @return The {@link ItemBuilder} instance.
      */
-    public ItemBuilder editItemMeta(Consumer<ItemMeta> meta) {
+    @SuppressWarnings("unchecked")
+    public <M extends ItemMeta> ItemBuilder editItemMeta(Consumer<M> metaConsumer) {
+        return editMeta(meta -> metaConsumer.accept((M)meta));
+    }
+
+    /**
+     * Method for editing the item meta.
+     *
+     * @param metaConsumer {@link Consumer} for editing the meta.
+     * @return The {@link ItemBuilder} instance.
+     */
+    public ItemBuilder editMeta(Consumer<? super ItemMeta> metaConsumer) {
         ItemMeta itemMeta = this.stack.getItemMeta();
-        meta.accept(itemMeta);
+        metaConsumer.accept(itemMeta);
         this.stack.setItemMeta(itemMeta);
         return this;
     }
 
     /**
-     * Method for editing the item meta with a specific meta class.
-     *
-     * @param metaClass The {@link ItemMeta} class or an extended variant.
-     * @param meta      {@link Consumer} for editing the meta.
-     * @param <T>       Type of the {@link ItemMeta} that is going to be edited.
-     * @return The {@link ItemBuilder} instance.
+     * Method for editing the basic item meta directly.
+     * @return the {@link ItemBuilder} instance.
      */
-    public <T extends ItemMeta> ItemBuilder editItemMeta(Class<T> metaClass, Consumer<T> meta) {
-        if (metaClass.isInstance(this.stack.getItemMeta())) {
-            T itemMeta = metaClass.cast(this.stack.getItemMeta());
-            meta.accept(itemMeta);
-            this.stack.setItemMeta(itemMeta);
-        }
-
-        return this;
-    }
-
     public ItemMetaBuilder editMeta() {
         return new ItemMetaBuilder(this);
     }
@@ -281,11 +286,23 @@ public class ItemBuilder {
     }
 
     /**
+     * Return the stack.
+     * (Currently no difference between {@see ItemBuilder#getStack} and {@see ItemBuilder#build()} maybe later,
+     * use {@see ItemBuilder#build()} when you are done building your item!).
+     * @return the {@link ItemStack}.
+     */
+    public ItemStack getStack() {
+        return stack;
+    }
+
+    /**
      * Build the item Builder with as result the {@link ItemStack}.
+     * (Currently no difference between {@see ItemBuilder#getStack} and {@see ItemBuilder#build()} maybe later,
+     * use {@see ItemBuilder#build()} when you are done building your item!).
      * @return The {@link ItemStack} made with this builder.
      */
     public ItemStack build() {
-        return stack;
+        return getStack();
     }
 
 }

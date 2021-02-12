@@ -30,35 +30,34 @@ import java.util.function.Consumer;
 
 public abstract class MetaBuilder<T extends ItemMeta, V extends MetaBuilder<T, V>> {
 
-    protected final ItemStack stack;
+    protected final ItemBuilder itemBuilder;
     protected final T itemMeta;
 
     private final Class<V> builderClass;
 
     protected MetaBuilder(ItemBuilder itemBuilder, Class<T> metaClass, Class<V> builderClass) {
         this.builderClass = builderClass;
-
-        this.stack = itemBuilder.build();
-        if (!metaClass.isInstance(stack.getItemMeta())) {
-            String itemMetaType = Objects.requireNonNull(stack.getItemMeta()).getClass().getSimpleName();
+        this.itemBuilder = itemBuilder;
+        if (!metaClass.isInstance(itemBuilder.getStack().getItemMeta())) {
+            String itemMetaType = Objects.requireNonNull(itemBuilder.getStack().getItemMeta()).getClass().getSimpleName();
             throw new ClassCastException(
                     "MetaBuilder expected an item with the ItemMeta type '" + metaClass.getSimpleName() + "' " +
                             "but got an Item with MetaType '" + itemMetaType + "' instead."
             );
         }
 
-        this.itemMeta = metaClass.cast(this.stack.getItemMeta());
+        this.itemMeta = metaClass.cast(itemBuilder.getStack().getItemMeta());
     }
 
 
     public ItemBuilder buildMeta() {
-        stack.setItemMeta(this.itemMeta);
-        return new ItemBuilder(stack);
+        itemBuilder.getStack().setItemMeta(this.itemMeta);
+        return itemBuilder;
     }
 
     public ItemStack build() {
-        stack.setItemMeta(this.itemMeta);
-        return stack;
+        itemBuilder.getStack().setItemMeta(this.itemMeta);
+        return itemBuilder.getStack();
     }
 
     protected V editMeta(Consumer<T> meta) {
