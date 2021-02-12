@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools;
+package com.bubladecoding.developertools.permissions.interfaces;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,33 +21,35 @@ package com.bubladecoding.developertools;
  * SOFTWARE.
  */
 
-import com.bubladecoding.developertools.events.MobEvents;
-import com.bubladecoding.developertools.managers.IGroupManager;
-import com.bubladecoding.developertools.managers.IUserManager;
 import com.bubladecoding.developertools.permissions.GroupParser;
 import com.bubladecoding.developertools.permissions.UserParser;
-import com.bubladecoding.developertools.permissions.interfaces.IGroup;
-import com.bubladecoding.developertools.permissions.interfaces.IUser;
-import com.bubladecoding.mcpluginbase.McPluginBase;
-import org.bukkit.plugin.ServicePriority;
+import com.bubladecoding.mcpluginbase.command.annotation.HelpFormat;
+import com.bubladecoding.mcpluginbase.command.annotation.Selector;
+import org.bukkit.permissions.Permission;
+import org.jetbrains.annotations.NotNull;
 
-public final class DeveloperTools extends McPluginBase implements DeveloperToolsPlugin {
+import java.util.List;
+import java.util.Map;
 
-    @Override
-    public void onEnable() {
-        // Plugin startup logic
-        getServer().getPluginManager().registerEvents(new MobEvents(), this);
+@Selector(name="group", parser = GroupParser.class)
+@Selector(name="user", parser = UserParser.class)
+@HelpFormat("@[selectors] {name}")
+public interface IPermissible {
 
-        getServer().getServicesManager().register(IUserManager.class, new UserManager(this), this, ServicePriority.High);
-        getServer().getServicesManager().register(IGroupManager.class, new GroupManager(this), this, ServicePriority.High);
+    String getName();
 
-        getCommandManager().registerParser(IUser.class, UserParser.class);
-        getCommandManager().registerParser(IGroup.class, GroupParser.class);
-    }
+    void addGroup(IGroup group);
+    void setGroups(IGroup group);
+    void removeGroup(IGroup group);
+    void setGroups(List<IGroup> groups);
 
-    @Override
-    public void onDisable() {
-//        saveResource();
-        // Plugin shutdown logic
-    }
+    Map<String, Boolean> getPermissions();
+
+    void setPermission(@NotNull String name);
+    void setPermission(@NotNull Permission permission);
+    void setPermission(@NotNull String name, boolean value);
+    void setPermission(@NotNull Permission permission, boolean value);
+
+    void unsetPermission(@NotNull String name);
+    void unsetPermission(@NotNull Permission permission);
 }

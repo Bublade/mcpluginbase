@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.events;
+package com.bubladecoding.developertools.permissions.interfaces;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,15 +21,10 @@ package com.bubladecoding.developertools.events;
  * SOFTWARE.
  */
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import java.util.UUID;
 
-public class ChatEvent implements Listener {
+public interface IGroup extends IPermissible {
 
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-
-    }
+    UUID getUuid();
 
 }

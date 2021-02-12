@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.events;
+package com.bubladecoding.developertools.permissions;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,15 +21,18 @@ package com.bubladecoding.developertools.events;
  * SOFTWARE.
  */
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+public enum PermissionValueType {
 
-public class ChatEvent implements Listener {
+    PERMISSION("permission"),
+    GROUP("group");
 
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
+    private final String displayName;
 
+    PermissionValueType(String displayName) {
+        this.displayName = displayName;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
 }

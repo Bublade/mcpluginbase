@@ -21,10 +21,13 @@ package com.bubladecoding.mcpluginbase;
  * SOFTWARE.
  */
 
+import com.bubladecoding.mcpluginbase.command.ICommandManager;
 import org.bukkit.plugin.Plugin;
 
 public interface PluginBase extends Plugin {
 
+    <T> T getService(Class<T> tClass);
 
+    ICommandManager getCommandManager();
 
 }

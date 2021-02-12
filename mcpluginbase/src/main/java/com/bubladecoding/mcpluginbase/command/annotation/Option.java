@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.events;
+package com.bubladecoding.mcpluginbase.command.annotation;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,15 +21,19 @@ package com.bubladecoding.developertools.events;
  * SOFTWARE.
  */
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import java.lang.annotation.*;
 
-public class ChatEvent implements Listener {
-
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-
-    }
-
+/**
+ * Annotation that represents a fixed option
+ * that yields a new instance of the given class.
+ * be aware that a parameter must either be of
+ * the same type as the given class or an abstract class
+ * /interface that the option extends/implements.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.TYPE})
+@Repeatable(Options.class)
+public @interface Option {
+    String name();
+    Class<?> optionClass();
 }

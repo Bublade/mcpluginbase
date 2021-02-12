@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools;
+package com.bubladecoding.developertools.permissions.actions;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,33 +21,45 @@ package com.bubladecoding.developertools;
  * SOFTWARE.
  */
 
-import com.bubladecoding.developertools.events.MobEvents;
+import com.bubladecoding.developertools.DeveloperToolsPlugin;
 import com.bubladecoding.developertools.managers.IGroupManager;
-import com.bubladecoding.developertools.managers.IUserManager;
-import com.bubladecoding.developertools.permissions.GroupParser;
-import com.bubladecoding.developertools.permissions.UserParser;
+import com.bubladecoding.developertools.permissions.PermissionValueType;
 import com.bubladecoding.developertools.permissions.interfaces.IGroup;
-import com.bubladecoding.developertools.permissions.interfaces.IUser;
-import com.bubladecoding.mcpluginbase.McPluginBase;
-import org.bukkit.plugin.ServicePriority;
+import com.bubladecoding.developertools.permissions.interfaces.IPermissible;
+import com.bubladecoding.developertools.permissions.interfaces.IPermissibleAction;
 
-public final class DeveloperTools extends McPluginBase implements DeveloperToolsPlugin {
+public class AddAction implements IPermissibleAction {
 
-    @Override
-    public void onEnable() {
-        // Plugin startup logic
-        getServer().getPluginManager().registerEvents(new MobEvents(), this);
+    private final DeveloperToolsPlugin plugin;
 
-        getServer().getServicesManager().register(IUserManager.class, new UserManager(this), this, ServicePriority.High);
-        getServer().getServicesManager().register(IGroupManager.class, new GroupManager(this), this, ServicePriority.High);
-
-        getCommandManager().registerParser(IUser.class, UserParser.class);
-        getCommandManager().registerParser(IGroup.class, GroupParser.class);
+    public AddAction(DeveloperToolsPlugin plugin) {
+        this.plugin = plugin;
     }
 
     @Override
-    public void onDisable() {
-//        saveResource();
-        // Plugin shutdown logic
+    public String getActionName() {
+        return null;
+    }
+
+    @Override
+    public boolean apply(String[] values, PermissionValueType type, IPermissible permissible) {
+        if (type == PermissionValueType.PERMISSION) {
+            for (String permission : values) {
+                permissible.setPermission(permission, true);
+            }
+            return true;
+        }
+
+        if (type == PermissionValueType.GROUP) {
+            for (String groupName : values) {
+                IGroup group = plugin.getService(IGroupManager.class).getGroup(groupName);
+                if (group != null) {
+                    permissible.addGroup(group);
+                }
+            }
+            return true;
+        }
+
+        return false;
     }
 }

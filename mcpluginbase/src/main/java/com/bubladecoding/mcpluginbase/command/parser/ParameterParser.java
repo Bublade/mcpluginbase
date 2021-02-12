@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.events;
+package com.bubladecoding.mcpluginbase.command.parser;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,15 +21,12 @@ package com.bubladecoding.developertools.events;
  * SOFTWARE.
  */
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.Nullable;
 
-public class ChatEvent implements Listener {
+import java.util.List;
 
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-
-    }
+public interface ParameterParser<T> {
+    @Nullable
+    T parse(List<String> args);
 
 }

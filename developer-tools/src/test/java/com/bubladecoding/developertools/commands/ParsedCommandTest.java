@@ -1,6 +1,11 @@
 package com.bubladecoding.developertools.commands;
 
+import com.bubladecoding.mcpluginbase.parsing.parses.BooleanParser;
+import org.bukkit.Location;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,14 +31,5 @@ import static org.junit.jupiter.api.Assertions.*;
  * SOFTWARE.
  */
 class ParsedCommandTest {
-
-    @Test
-    void getExecutorMethod() {
-        FlyCommand pc = new FlyCommand();
-        for (String command : pc.getCommands()) {
-            System.out.println(command);
-        }
-        assertTrue(true);
-    }
 
 }

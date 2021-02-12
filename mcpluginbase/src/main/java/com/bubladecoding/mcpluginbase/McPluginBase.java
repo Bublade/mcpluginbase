@@ -21,14 +21,33 @@ package com.bubladecoding.mcpluginbase;
  * SOFTWARE.
  */
 
-import org.bukkit.command.*;
+import com.bubladecoding.mcpluginbase.command.ICommandManager;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
+import org.bukkit.command.TabExecutor;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class McPluginBase extends JavaPlugin {
+public abstract class McPluginBase extends JavaPlugin implements PluginBase {
+
+    private final ICommandManager commandManager;
+
+    public McPluginBase() {
+        commandManager = new ICommandManagerImpl(this);
+    }
+
+    @Override
+    public ICommandManager getCommandManager() {
+        return commandManager;
+    }
 
     /**
      * Register a command.
-     * @param name Name of the command in the plugin.yml.
+     *
+     * @param name     Name of the command in the plugin.yml.
      * @param executor The executor.
      */
     protected void registerCommandExecutor(String name, CommandExecutor executor) {
@@ -39,9 +58,11 @@ public abstract class McPluginBase extends JavaPlugin {
 
         command.setExecutor(executor);
     }
+
     /**
      * Register a command tab completer.
-     * @param name Name of the command in the plugin.yml.
+     *
+     * @param name     Name of the command in the plugin.yml.
      * @param executor The completer.
      */
     protected void registerTabCompleter(String name, TabCompleter executor) {
@@ -52,9 +73,11 @@ public abstract class McPluginBase extends JavaPlugin {
 
         command.setTabCompleter(executor);
     }
+
     /**
      * Register a command with tab executor.
-     * @param name Name of the command in the plugin.yml.
+     *
+     * @param name     Name of the command in the plugin.yml.
      * @param executor The executor.
      */
     protected void registerTabExecutor(String name, TabExecutor executor) {
@@ -65,5 +88,11 @@ public abstract class McPluginBase extends JavaPlugin {
 
         command.setExecutor(executor);
         command.setTabCompleter(executor);
+    }
+
+    @Override
+    @Nullable
+    public <T> T getService(@NotNull Class<T> tClass) {
+        return getServer().getServicesManager().load(tClass);
     }
 }

@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.events;
+package com.bubladecoding.developertools.permissions.actions;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,15 +21,18 @@ package com.bubladecoding.developertools.events;
  * SOFTWARE.
  */
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import com.bubladecoding.developertools.permissions.PermissionValueType;
+import com.bubladecoding.developertools.permissions.interfaces.IPermissible;
+import com.bubladecoding.developertools.permissions.interfaces.IPermissibleAction;
 
-public class ChatEvent implements Listener {
-
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-
+public class RemoveAction implements IPermissibleAction {
+    @Override
+    public String getActionName() {
+        return null;
     }
 
+    @Override
+    public boolean apply(String[] values, PermissionValueType type, IPermissible permissible) {
+        return false;
+    }
 }

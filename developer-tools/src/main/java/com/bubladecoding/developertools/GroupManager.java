@@ -1,4 +1,3 @@
-package com.bubladecoding.developertools;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -20,34 +19,54 @@ package com.bubladecoding.developertools;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.developertools;
 
-import com.bubladecoding.developertools.events.MobEvents;
 import com.bubladecoding.developertools.managers.IGroupManager;
-import com.bubladecoding.developertools.managers.IUserManager;
-import com.bubladecoding.developertools.permissions.GroupParser;
-import com.bubladecoding.developertools.permissions.UserParser;
 import com.bubladecoding.developertools.permissions.interfaces.IGroup;
-import com.bubladecoding.developertools.permissions.interfaces.IUser;
-import com.bubladecoding.mcpluginbase.McPluginBase;
-import org.bukkit.plugin.ServicePriority;
+import com.bubladecoding.developertools.permissions.permissibles.Group;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public final class DeveloperTools extends McPluginBase implements DeveloperToolsPlugin {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
-    @Override
-    public void onEnable() {
-        // Plugin startup logic
-        getServer().getPluginManager().registerEvents(new MobEvents(), this);
+public class GroupManager implements IGroupManager {
 
-        getServer().getServicesManager().register(IUserManager.class, new UserManager(this), this, ServicePriority.High);
-        getServer().getServicesManager().register(IGroupManager.class, new GroupManager(this), this, ServicePriority.High);
+    private final DeveloperToolsPlugin plugin;
+    private final Map<UUID, IGroup> groups;
+    private final Map<String, UUID> groupNames;
 
-        getCommandManager().registerParser(IUser.class, UserParser.class);
-        getCommandManager().registerParser(IGroup.class, GroupParser.class);
+    public GroupManager(DeveloperToolsPlugin plugin) {
+        this.plugin = plugin;
+        this.groups = new HashMap<>();
+        this.groupNames = new HashMap<>();
     }
 
+    @Nullable
     @Override
-    public void onDisable() {
-//        saveResource();
-        // Plugin shutdown logic
+    public IGroup getGroup(@NotNull String name) {
+        UUID uuid = this.groupNames.get(name.toLowerCase());
+        return this.groups.get(uuid);
+    }
+
+    @Nullable
+    @Override
+    public IGroup getGroup(@NotNull UUID uuid) {
+        return this.groups.get(uuid);
+    }
+
+    @Nullable
+    @Override
+    public IGroup createGroup(@NotNull String name) {
+        if (this.groupNames.containsKey(name.toLowerCase())) {
+           return null;
+        }
+
+        IGroup group = new Group(name.toLowerCase());
+        this.groups.put(group.getUuid(), group);
+        this.groupNames.put(name, group.getUuid());
+
+        return group;
     }
 }

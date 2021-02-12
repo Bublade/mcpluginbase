@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.events;
+package com.bubladecoding.mcpluginbase.command.annotation;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,15 +21,12 @@ package com.bubladecoding.developertools.events;
  * SOFTWARE.
  */
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class ChatEvent implements Listener {
-
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-
-    }
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.TYPE})
+public @interface Optional {
 }

@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.events;
+package com.bubladecoding.developertools.commands;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,15 +21,23 @@ package com.bubladecoding.developertools.events;
  * SOFTWARE.
  */
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import com.bubladecoding.mcpluginbase.item.ItemBuilder;
+import com.bubladecoding.mcpluginbase.item.meta.SkullMetaBuilder;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-public class ChatEvent implements Listener {
+public class TestCommand implements CommandExecutor {
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-
+        ItemStack item = new ItemBuilder(Material.PLAYER_HEAD)
+                .setType(Material.PLAYER_HEAD)
+                .editMeta(SkullMetaBuilder.class)
+                .build();
+        return false;
     }
-
 }

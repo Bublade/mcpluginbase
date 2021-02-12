@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.events;
+package com.bubladecoding.developertools;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -21,15 +21,8 @@ package com.bubladecoding.developertools.events;
  * SOFTWARE.
  */
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import com.bubladecoding.mcpluginbase.PluginBase;
 
-public class ChatEvent implements Listener {
-
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-
-    }
+public interface DeveloperToolsPlugin extends PluginBase {
 
 }
