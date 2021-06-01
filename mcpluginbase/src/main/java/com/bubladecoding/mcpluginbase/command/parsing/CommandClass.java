@@ -1,4 +1,3 @@
-package com.bubladecoding.mcpluginbase.command.parsing;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -20,10 +19,13 @@ package com.bubladecoding.mcpluginbase.command.parsing;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.mcpluginbase.command.parsing;
 
 public class CommandClass {
 
-    private CommandConstructor[] constructors;
-    private CommandMethod[] methods;
+    public final CommandMethod[] commandMethods;
 
+    public CommandClass(CommandMethod[] commandMethods) {
+        this.commandMethods = commandMethods;
+    }
 }

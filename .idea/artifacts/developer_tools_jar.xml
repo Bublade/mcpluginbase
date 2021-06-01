@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="developer-tools:jar">
+    <output-path>$PROJECT_DIR$/../../../../../../../workspacetest/workspace/minecraft/servers/1.16.5-pluginbasetestserver/plugins</output-path>
+    <root id="archive" name="developer-tools.jar">
+      <element id="module-output" name="developer-tools" />
+      <element id="file-copy" path="$PROJECT_DIR$/developer-tools/src/main/resources/plugin.yml" />
+      <element id="module-output" name="mcpluginbase" />
+    </root>
+  </artifact>
+</component>

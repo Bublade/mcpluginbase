@@ -21,6 +21,8 @@ package com.bubladecoding.developertools;
  * SOFTWARE.
  */
 
+import com.bubladecoding.developertools.commands.FlyCommand;
+import com.bubladecoding.developertools.commands.test.*;
 import com.bubladecoding.developertools.events.MobEvents;
 import com.bubladecoding.developertools.managers.IGroupManager;
 import com.bubladecoding.developertools.managers.IUserManager;
@@ -43,6 +45,12 @@ public final class DeveloperTools extends McPluginBase implements DeveloperTools
 
         getCommandManager().registerParser(IUser.class, UserParser.class);
         getCommandManager().registerParser(IGroup.class, GroupParser.class);
+
+        getCommandManager().registerParser(ISelectorOneTest.class, SelectorOneTestParser.class);
+        getCommandManager().registerParser(ISelectorTwoTest.class, SelectorTwoTestParser.class);
+
+        getCommandManager().registerCommands(FlyCommand.class);
+        getCommandManager().registerCommands(TestCommand.class);
     }
 
     @Override

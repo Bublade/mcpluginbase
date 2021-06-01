@@ -64,6 +64,109 @@ public class UserBase implements Player {
         this.playerBase = playerBase;
     }
 
+    /**
+     * Gets the player's estimated ping in milliseconds.
+     * <p>
+     * In Vanilla this value represents the average of the response time to the
+     * last four application layer ping packets sent. This value does not
+     * represent the network round trip time and as such may have less
+     * granularity and be impacted by other sources. For these reasons it
+     * <b>should not</b> be used for anti-cheat purposes. Its recommended use is
+     * only as a <b>qualitative</b> indicator of connection quality (Vanilla
+     * uses it for this purpose in the tab list).
+     *
+     * @return player ping
+     */
+    @Override
+    public int getPing() {
+        return playerBase.getPing();
+    }
+
+    /**
+     * Send block damage. This fakes block break progress for a user at a
+     * certain location. This will not actually change the block's break
+     * progress in any way.
+     *
+     * @param loc      the location of the damaged block
+     * @param progress the progress from 0.0 - 1.0 where 0 is no damage and
+     */
+    @Override
+    public void sendBlockDamage(@NotNull Location loc, float progress) {
+        playerBase.sendBlockDamage(loc, progress);
+    }
+
+    /**
+     * Get the regeneration rate (1 health per x ticks) of
+     * the HumanEntity when they have saturation and
+     * their food level is {@literal >=} 20. Default is 10.
+     *
+     * @return the regeneration rate
+     */
+    @Override
+    public int getSaturatedRegenRate() {
+        return playerBase.getSaturatedRegenRate();
+    }
+
+    /**
+     * Set the regeneration rate (1 health per x ticks) of
+     * the HumanEntity when they have saturation and
+     * their food level is {@literal >=} 20. Default is 10.
+     * Not affected if the world's difficulty is peaceful.
+     *
+     * @param ticks the amount of ticks to gain 1 health.
+     */
+    @Override
+    public void setSaturatedRegenRate(int ticks) {
+        playerBase.setSaturatedRegenRate(ticks);
+    }
+
+    /**
+     * Get the regeneration rate (1 health per x ticks) of
+     * the HumanEntity when they have no saturation and
+     * their food level is {@literal >=} 18. Default is 80.
+     *
+     * @return the regeneration rate
+     */
+    @Override
+    public int getUnsaturatedRegenRate() {
+        return playerBase.getUnsaturatedRegenRate();
+    }
+
+    /**
+     * Get the regeneration rate (1 health per x ticks) of
+     * the HumanEntity when they have no saturation and
+     * their food level is {@literal >=} 18. Default is 80.
+     * Not affected if the world's difficulty is peaceful.
+     *
+     * @param ticks the amount of ticks to gain 1 health.
+     */
+    @Override
+    public void setUnsaturatedRegenRate(int ticks) {
+        playerBase.setUnsaturatedRegenRate(ticks);
+    }
+
+    /**
+     * Get the starvation rate (1 health per x ticks) of
+     * the HumanEntity. Default is 80.
+     *
+     * @return the starvation rate
+     */
+    @Override
+    public int getStarvationRate() {
+        return playerBase.getStarvationRate();
+    }
+
+    /**
+     * Get the starvation rate (1 health per x ticks) of
+     * the HumanEntity. Default is 80.
+     *
+     * @param ticks the amount of ticks to lose 1 health
+     */
+    @Override
+    public void setStarvationRate(int ticks) {
+        playerBase.setStarvationRate(ticks);
+    }
+
     @Override
     public @NotNull String getDisplayName() {
         return this.playerBase.getDisplayName();

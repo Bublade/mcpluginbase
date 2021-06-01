@@ -26,17 +26,20 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 public abstract class McPluginBase extends JavaPlugin implements PluginBase {
 
     private final ICommandManager commandManager;
 
     public McPluginBase() {
-        commandManager = new ICommandManagerImpl(this);
+        commandManager = new CommandManager(this);
     }
 
     @Override
@@ -94,5 +97,39 @@ public abstract class McPluginBase extends JavaPlugin implements PluginBase {
     @Nullable
     public <T> T getService(@NotNull Class<T> tClass) {
         return getServer().getServicesManager().load(tClass);
+    }
+
+    @Override
+    public <T> T createInjectedClass(Class<T> tClass) {
+        try {
+            Constructor<T> constructor = getConstructor(tClass);
+            if (constructor != null) {
+                Object[] params = getParamServices(constructor);
+                return constructor.newInstance(params);
+            } else {
+                return tClass.newInstance();
+            }
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> Constructor<T> getConstructor(Class<T> clazz) {
+        return (Constructor<T>) Arrays.stream(clazz.getConstructors()).findFirst().orElse(null);
+    }
+
+    private Object[] getParamServices(Constructor<?> constructor) {
+        Class<?>[] paramTypes = constructor.getParameterTypes();
+        Object[] paramObjects = new Object[paramTypes.length];
+
+        for (int i = 0; i < paramTypes.length; i++) {
+            paramObjects[i] = this.getService(paramTypes[i]);
+            if (paramObjects[i] == null && this.getClass().isAssignableFrom(paramTypes[i])) {
+                paramObjects[i] = this;
+            }
+        }
+
+        return paramObjects;
     }
 }

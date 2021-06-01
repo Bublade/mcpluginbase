@@ -1,6 +1,5 @@
-package com.bubladecoding.mcpluginbase;
 /*
- * Copyright (c) 2020 bublade
+ * Copyright (c) 2021 bublade
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,17 +19,24 @@ package com.bubladecoding.mcpluginbase;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.developertools.commands.test;
 
-import com.bubladecoding.mcpluginbase.command.ICommandManager;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.ServicePriority;
-import org.jetbrains.annotations.NotNull;
+import com.bubladecoding.developertools.DeveloperToolsPlugin;
+import com.bubladecoding.mcpluginbase.command.CommandBase;
+import com.bubladecoding.mcpluginbase.command.annotation.AutoInject;
+import com.bubladecoding.mcpluginbase.command.annotation.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
-public interface PluginBase extends Plugin {
+public class TestCommand extends CommandBase<DeveloperToolsPlugin> {
+    public TestCommand(DeveloperToolsPlugin plugin) {
+        super(plugin);
+    }
 
-    ICommandManager getCommandManager();
+    @CommandExecutor("test")
+    public void onTest(@AutoInject CommandSender sender, IOptionTest option, ISelectorTest selector, @AutoInject String[] restArgs) {
+        sender.sendMessage("SELECTOR: " + selector.getSomething());
+        sender.sendMessage("OPTION: " + option.getOptionName());
+        sender.sendMessage("rest args: " + String.join(", ", restArgs));
+    }
 
-    <T> T getService(Class<T> tClass);
-
-    <T> T createInjectedClass(Class<T> tClass);
 }

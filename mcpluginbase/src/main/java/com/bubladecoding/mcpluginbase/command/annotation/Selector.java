@@ -21,8 +21,6 @@ package com.bubladecoding.mcpluginbase.command.annotation;
  * SOFTWARE.
  */
 
-import com.bubladecoding.mcpluginbase.command.parser.ParameterParser;
-
 import java.lang.annotation.*;
 
 /**
@@ -37,5 +35,5 @@ import java.lang.annotation.*;
 @Repeatable(Selectors.class)
 public @interface Selector {
     String name();
-    Class<? extends ParameterParser<?>> parser();
+    Class<?> parameterType();
 }

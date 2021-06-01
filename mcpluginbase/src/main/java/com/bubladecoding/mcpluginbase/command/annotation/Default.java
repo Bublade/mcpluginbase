@@ -1,4 +1,3 @@
-package com.bubladecoding.mcpluginbase.command.annotation;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -20,6 +19,7 @@ package com.bubladecoding.mcpluginbase.command.annotation;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.mcpluginbase.command.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -29,4 +29,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER, ElementType.TYPE})
 public @interface Default {
+    /**
+     * The default value of an argument of a command,
+     * this value is going to be parsed by the parser for the type of that argument.
+     */
+    String value();
 }

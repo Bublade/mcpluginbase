@@ -1,4 +1,3 @@
-package com.bubladecoding.developertools.permissions;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -20,27 +19,40 @@ package com.bubladecoding.developertools.permissions;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.developertools.commands;
 
 import com.bubladecoding.developertools.DeveloperToolsPlugin;
-import com.bubladecoding.developertools.permissions.interfaces.IPermissible;
-import com.bubladecoding.developertools.permissions.interfaces.IPermissibleAction;
 import com.bubladecoding.mcpluginbase.command.CommandBase;
 import com.bubladecoding.mcpluginbase.command.annotation.AutoInject;
 import com.bubladecoding.mcpluginbase.command.annotation.CommandExecutor;
+import com.bubladecoding.mcpluginbase.command.annotation.Optional;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class PermissionCommand extends CommandBase<DeveloperToolsPlugin> {
+public class FlyCommand extends CommandBase<DeveloperToolsPlugin> {
 
-    public PermissionCommand(DeveloperToolsPlugin plugin) {
+    public FlyCommand(DeveloperToolsPlugin plugin) {
         super(plugin);
     }
 
-    // perms ([group] admin) [add] [group] "admin owner moderator"
-    // perms ([user] alwaysthatjay) [add] [group] "admin"
+    @CommandExecutor( value = "fly", parent = "player")
+    public void onFly(@AutoInject CommandSender sender, @Optional Boolean state, @Optional Player target) {
+        if (target == null) {
+            sender.sendMessage("target null");
+            if (sender instanceof Player) {
+                target = (Player) sender;
+                sender.sendMessage("sender is target");
+            } else {
+                sender.sendMessage("no target");
+                return;
+            }
+        }
 
-    @CommandExecutor("permissions")
-    public boolean onPermissions(@AutoInject CommandSender sender, IPermissible permissible, IPermissibleAction action, PermissionValueType type, String[] args) {
-        return action.apply(sender, args, type, permissible);
+        if (state == null) {
+            sender.sendMessage("state is null");
+            state = !target.getAllowFlight();
+        }
+
+        target.setAllowFlight(state);
     }
-
 }

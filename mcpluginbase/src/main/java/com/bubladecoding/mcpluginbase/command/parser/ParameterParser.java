@@ -21,12 +21,35 @@ package com.bubladecoding.mcpluginbase.command.parser;
  * SOFTWARE.
  */
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public interface ParameterParser<T> {
     @Nullable
-    T parse(List<String> args);
+    default T parse(List<String> args) {
+        return null;
+    }
 
+    @Nullable
+    default T parse(Command command, List<String> args) {
+        return parse(args);
+    }
+
+    @Nullable
+    default T parse(CommandSender sender, List<String> args) {
+        return parse(args);
+    }
+
+    @Nullable
+    default T parse(Command command, CommandSender sender, List<String> args) {
+        T result = parse(sender, args);
+        if (result != null) {
+            return result;
+        }
+
+        return parse(command, args);
+    }
 }

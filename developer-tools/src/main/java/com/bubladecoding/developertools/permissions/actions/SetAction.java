@@ -24,6 +24,7 @@ package com.bubladecoding.developertools.permissions.actions;
 import com.bubladecoding.developertools.permissions.PermissionValueType;
 import com.bubladecoding.developertools.permissions.interfaces.IPermissible;
 import com.bubladecoding.developertools.permissions.interfaces.IPermissibleAction;
+import org.bukkit.command.CommandSender;
 
 public class SetAction implements IPermissibleAction {
     @Override
@@ -32,7 +33,7 @@ public class SetAction implements IPermissibleAction {
     }
 
     @Override
-    public boolean apply(String[] values, PermissionValueType type, IPermissible permissible) {
+    public boolean apply(CommandSender sender, String[] values, PermissionValueType type, IPermissible permissible) {
         return false;
     }
 }

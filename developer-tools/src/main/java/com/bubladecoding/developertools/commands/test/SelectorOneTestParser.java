@@ -1,4 +1,3 @@
-package com.bubladecoding.mcpluginbase.command;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -20,12 +19,18 @@ package com.bubladecoding.mcpluginbase.command;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.developertools.commands.test;
 
-import com.bubladecoding.mcpluginbase.PluginBase;
+import com.bubladecoding.mcpluginbase.command.parser.ParameterParser;
+import org.jetbrains.annotations.Nullable;
 
-public class GeneralCommandBase extends CommandBase<PluginBase> {
+import java.util.List;
 
-    public GeneralCommandBase(PluginBase plugin) {
-        super(plugin);
+public class SelectorOneTestParser implements ParameterParser<ISelectorOneTest> {
+
+    @Override
+    public @Nullable ISelectorOneTest parse(List<String> args) {
+        final String arg = args.remove(0);
+        return () -> "ONE: " + arg;
     }
 }

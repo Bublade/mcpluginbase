@@ -32,10 +32,13 @@ public interface IUserManager {
 
     @Nullable
     IUser getUser(@NotNull String name);
+
     @Nullable
     IUser getUser(@NotNull UUID uuid);
+
     @Nullable
     IUser getUser(@NotNull Player player);
+
     void updateUser(@NotNull UUID uuid, @NotNull IUser user);
 
     @Nullable

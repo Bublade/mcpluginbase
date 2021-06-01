@@ -22,17 +22,19 @@ package com.bubladecoding.developertools.permissions.actions;
  */
 
 import com.bubladecoding.developertools.DeveloperToolsPlugin;
+import com.bubladecoding.developertools.GroupManager;
 import com.bubladecoding.developertools.managers.IGroupManager;
 import com.bubladecoding.developertools.permissions.PermissionValueType;
 import com.bubladecoding.developertools.permissions.interfaces.IGroup;
 import com.bubladecoding.developertools.permissions.interfaces.IPermissible;
 import com.bubladecoding.developertools.permissions.interfaces.IPermissibleAction;
+import org.bukkit.command.CommandSender;
 
 public class AddAction implements IPermissibleAction {
 
     private final DeveloperToolsPlugin plugin;
 
-    public AddAction(DeveloperToolsPlugin plugin) {
+    public AddAction(DeveloperToolsPlugin plugin, GroupManager groupManager) {
         this.plugin = plugin;
     }
 
@@ -42,11 +44,12 @@ public class AddAction implements IPermissibleAction {
     }
 
     @Override
-    public boolean apply(String[] values, PermissionValueType type, IPermissible permissible) {
+    public boolean apply(CommandSender sender, String[] values, PermissionValueType type, IPermissible permissible) {
         if (type == PermissionValueType.PERMISSION) {
             for (String permission : values) {
                 permissible.setPermission(permission, true);
             }
+
             return true;
         }
 

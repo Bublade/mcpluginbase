@@ -29,5 +29,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface CommandExecutor {
-    String group() default "default";
+    String value();
+    String parent() default "default";
 }

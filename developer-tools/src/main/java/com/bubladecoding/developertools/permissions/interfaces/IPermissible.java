@@ -31,8 +31,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-@Selector(name="group", parser = GroupParser.class)
-@Selector(name="user", parser = UserParser.class)
+@Selector(name="group", parameterType = IGroup.class)
+@Selector(name="user", parameterType = IUser.class)
 @HelpFormat("@[selectors] {name}")
 public interface IPermissible {
 

@@ -1,4 +1,3 @@
-package com.bubladecoding.mcpluginbase.command.parsing;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -20,6 +19,12 @@ package com.bubladecoding.mcpluginbase.command.parsing;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package com.bubladecoding.developertools.commands.test;
 
-public class CommandConstructor {
+import com.bubladecoding.mcpluginbase.command.annotation.Option;
+
+@Option(name = "one", optionClass = Option1.class)
+@Option(name = "two", optionClass = Option2.class)
+public interface IOptionTest {
+    String getOptionName();
 }

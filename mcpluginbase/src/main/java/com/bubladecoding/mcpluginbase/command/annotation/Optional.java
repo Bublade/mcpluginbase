@@ -29,4 +29,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.PARAMETER, ElementType.TYPE})
 public @interface Optional {
+    boolean value() default true;
 }

@@ -31,13 +31,15 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class TestCommand implements CommandExecutor {
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-
         ItemStack item = new ItemBuilder(Material.PLAYER_HEAD)
-                .setType(Material.PLAYER_HEAD)
+                .setAmount(10)
                 .editMeta(SkullMetaBuilder.class)
+                .setOwningPlayer(null)
                 .build();
+
         return false;
     }
 }

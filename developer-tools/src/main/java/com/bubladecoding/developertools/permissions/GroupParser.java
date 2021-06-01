@@ -21,16 +21,33 @@ package com.bubladecoding.developertools.permissions;
  * SOFTWARE.
  */
 
+import com.bubladecoding.developertools.managers.IGroupManager;
+import com.bubladecoding.developertools.managers.IUserManager;
 import com.bubladecoding.developertools.permissions.interfaces.IGroup;
+import com.bubladecoding.developertools.permissions.interfaces.IUser;
+import com.bubladecoding.developertools.permissions.permissibles.Group;
 import com.bubladecoding.mcpluginbase.command.parser.ParameterParser;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class GroupParser implements ParameterParser<IGroup> {
-    @Override
-    public @Nullable IGroup parse(List<String> args) {
 
-        return null;
+    private final IGroupManager groupManager;
+
+    public GroupParser(IGroupManager groupManager) {
+        this.groupManager = groupManager;
+    }
+
+    @Override
+    public @Nullable IGroup parse(Command command, CommandSender sender, List<String> args) {
+        if (args.size() == 0) {
+            return null;
+        }
+
+        String name = args.remove(0);
+        return groupManager.getGroup(name);
     }
 }

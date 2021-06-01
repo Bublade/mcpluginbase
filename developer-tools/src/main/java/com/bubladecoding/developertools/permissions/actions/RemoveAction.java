@@ -21,18 +21,48 @@ package com.bubladecoding.developertools.permissions.actions;
  * SOFTWARE.
  */
 
+import com.bubladecoding.developertools.DeveloperToolsPlugin;
+import com.bubladecoding.developertools.managers.IGroupManager;
 import com.bubladecoding.developertools.permissions.PermissionValueType;
+import com.bubladecoding.developertools.permissions.interfaces.IGroup;
 import com.bubladecoding.developertools.permissions.interfaces.IPermissible;
 import com.bubladecoding.developertools.permissions.interfaces.IPermissibleAction;
+import org.bukkit.command.CommandSender;
 
 public class RemoveAction implements IPermissibleAction {
+
+    private final DeveloperToolsPlugin plugin;
+
+    public RemoveAction(DeveloperToolsPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+
     @Override
     public String getActionName() {
         return null;
     }
 
     @Override
-    public boolean apply(String[] values, PermissionValueType type, IPermissible permissible) {
+    public boolean apply(CommandSender sender, String[] values, PermissionValueType type, IPermissible permissible) {
+        if (type == PermissionValueType.PERMISSION) {
+            for (String permission : values) {
+                permissible.unsetPermission(permission);
+            }
+
+            return true;
+        }
+
+        if (type == PermissionValueType.GROUP) {
+            for (String groupName : values) {
+                IGroup group = plugin.getService(IGroupManager.class).getGroup(groupName);
+                if (group != null) {
+                    permissible.removeGroup(group);
+                }
+            }
+            return true;
+        }
+
         return false;
     }
 }

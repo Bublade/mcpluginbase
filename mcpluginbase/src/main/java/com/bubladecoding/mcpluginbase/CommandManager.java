@@ -21,39 +21,52 @@ package com.bubladecoding.mcpluginbase;
  * SOFTWARE.
  */
 
+import com.bubladecoding.mcpluginbase.command.CommandBase;
 import com.bubladecoding.mcpluginbase.command.ICommandManager;
+import com.bubladecoding.mcpluginbase.command.MainCommandExecutor;
 import com.bubladecoding.mcpluginbase.command.parser.ParameterParser;
 import com.bubladecoding.mcpluginbase.command.parser.PlayerParameterParser;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-class ICommandManagerImpl implements ICommandManager {
+class CommandManager implements ICommandManager {
 
     private final Map<Class<?>, ParameterParser<?>> parsers;
+    private final Map<Class<?>, Object> options;
     private final PluginBase pluginBase;
+    private final MainCommandExecutor commandExecutor;
 
-    public ICommandManagerImpl(PluginBase pluginBase) {
+    public CommandManager(PluginBase pluginBase) {
         this.pluginBase = pluginBase;
 
-        parsers = new HashMap<>();
+        this.parsers = new HashMap<>();
+        this.options = new HashMap<>();
+        this.commandExecutor = new MainCommandExecutor(pluginBase);
+
         registerParser(Player.class, PlayerParameterParser.class);
     }
 
+    public <P extends PluginBase, T extends CommandBase<P>> void registerCommands(T commandBase) {
+        this.commandExecutor.addCommands(commandBase);
+    }
+
+    public <P extends PluginBase, T extends CommandBase<P>> void registerCommands(Class<T> commandClass) {
+        T commandBase = pluginBase.createInjectedClass(commandClass);
+        this.commandExecutor.addCommands(commandBase);
+    }
+
     @Override
-    public <T, S extends ParameterParser<T>> void registerParser(Class<T> target, Class<S> parserClazz) {
-        try {
-            Constructor<S> constructor = getConstructor(parserClazz);
-            Object[] params = getParamServices(constructor);
-            parsers.put(target, constructor.newInstance(params));
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+    public <T, S extends ParameterParser<T>> void registerParser(Class<T> target, Class<S> parserClass) {
+        parsers.put(target, pluginBase.createInjectedClass(parserClass));
+    }
+
+    @Override
+    public void registerOption(Class<?> optionClass){
+        Object option = pluginBase.createInjectedClass(optionClass);
+        options.put(optionClass, option);
     }
 
     @SuppressWarnings("unchecked")
@@ -71,23 +84,9 @@ class ICommandManagerImpl implements ICommandManager {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Constructor<T> getConstructor(Class<T> clazz) {
-        return (Constructor<T>) Arrays.stream(clazz.getConstructors()).findFirst().orElse(null);
-    }
-
-    private Object[] getParamServices(Constructor<?> constructor) {
-        Class<?>[] paramTypes = constructor.getParameterTypes();
-        Object[] paramObjects = new Object[paramTypes.length];
-
-        for (int i = 0; i < paramTypes.length; i++) {
-            paramObjects[i] = this.pluginBase.getService(paramTypes[i]);
-            if (paramObjects[i] == null) {
-                if (pluginBase.getClass().isAssignableFrom(paramTypes[i])) {
-                    paramObjects[i] = pluginBase;
-                }
-            }
-        }
-
-        return paramObjects;
+    @Nullable
+    @Override
+    public <T> T getOption(Class<T> target) {
+        return (T) options.get(target);
     }
 }

@@ -38,12 +38,8 @@ public class UserParser implements ParameterParser<IUser> {
 
     @Override
     public @Nullable IUser parse(List<String> args) {
-        if (args.size() < 2) {
+        if (args.size() == 0) {
             return null;
-        }
-
-        if (args.get(0).equalsIgnoreCase("user")) {
-            args.remove(0);
         }
 
         String name = args.remove(0);

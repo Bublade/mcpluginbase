@@ -21,14 +21,22 @@ package com.bubladecoding.mcpluginbase.command;
  * SOFTWARE.
  */
 
+import com.bubladecoding.mcpluginbase.PluginBase;
 import com.bubladecoding.mcpluginbase.command.parser.ParameterParser;
+import org.jetbrains.annotations.Nullable;
 
 public interface ICommandManager {
+    <P extends PluginBase, T extends CommandBase<P>> void registerCommands(T commandBase);
+
+    <P extends PluginBase, T extends CommandBase<P>> void registerCommands(Class<T> commandClass);
 
     <T, S extends ParameterParser<T>> void registerParser(Class<T> target, Class<S> parserClazz);
 
+    void registerOption(Class<?> optionClass);
+
     <T> ParameterParser<T> unregisterParser(Class<T> target);
 
-    <T> ParameterParser<T> getParser(Class<T> target);
+    @Nullable <T> ParameterParser<T> getParser(Class<T> target);
 
+    @Nullable <T> T getOption(Class<T> target);
 }
