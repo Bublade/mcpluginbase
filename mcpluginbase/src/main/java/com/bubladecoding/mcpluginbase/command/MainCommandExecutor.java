@@ -24,6 +24,7 @@ package com.bubladecoding.mcpluginbase.command;
 import com.bubladecoding.mcpluginbase.PluginBase;
 import com.bubladecoding.mcpluginbase.command.annotation.Option;
 import com.bubladecoding.mcpluginbase.command.annotation.Selector;
+import com.bubladecoding.mcpluginbase.command.exceptions.ArgumentException;
 import com.bubladecoding.mcpluginbase.command.parser.ParameterParser;
 import com.bubladecoding.mcpluginbase.command.parsing.*;
 import com.bubladecoding.mcpluginbase.parsing.Parser;
@@ -36,6 +37,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -114,104 +116,108 @@ public class MainCommandExecutor implements CommandExecutor {
         CommandArgument<?>[] arguments = method.getArguments();
         Object[] arrArguments = new Object[arguments.length];
 
-        for (int i = 0; i < arguments.length; i++) {
-            CommandArgument<?> argument = arguments[i];
-            if (argument.isAutoInject()) {
-                if (argument.getType().equals(CommandSender.class)) {
-                    arrArguments[i] = sender;
-                }
-
-                if (argument.getType().equals(Command.class)) {
-                    arrArguments[i] = command;
-                }
-
-                if (argument.getType().isArray() && argument.getType().getComponentType().equals(String.class)) {
-                    arrArguments[i] = lstArgs.toArray(new String[0]);
-                    lstArgs.clear();
-                    // injected final args
-                    break;
-                }
-
-                continue;
-            }
-
-            if (lstArgs.size() == 0) {
-                if (!argument.isOptional()) {
-                    // todo send not enough arguments message.
-                    return false;
-                }
-
-                arrArguments[i] = null;
-                continue;
-            }
-
-            if (argument.getOptions().length > 0) {
-                Option[] options = argument.getOptions();
-                boolean isSet = false;
-                for (Option option : options) {
-                    if (lstArgs.get(0).equals(option.name())) {
-                        lstArgs.remove(0);
-                        arrArguments[i] = pluginBase.getCommandManager().getOption(option.optionClass());
-                        isSet = true;
-                    }
-                }
-
-                if (isSet) {
-                    continue;
-                }
-            }
-
-            if (argument.getSelectors().length > 0) {
-                Selector[] selectors = argument.getSelectors();
-                boolean isSet = false;
-                for (Selector selector : selectors) {
-                    if (lstArgs.get(0).equals(selector.name())) {
-                        lstArgs.remove(0);
-                        int argsCount = lstArgs.size();
-                        ParameterParser<?> parser = pluginBase.getCommandManager().getParser(selector.parameterType());
-                        if (parser == null) {
-                            if (argument.isOptional()) {
-                                arrArguments[i] = null;
-                                isSet = true;
-                                continue;
-                            }
-                        } else {
-                            arrArguments[i] = parser.parse(lstArgs);
-                            isSet = true;
-                        }
-
-                        if (argsCount == lstArgs.size()) {
-                            lstArgs.remove(0);
-                        }
-                    }
-                }
-
-                if (isSet) {
-                    continue;
-                }
-            }
-
-            ParameterParser<?> paramParser = argument.getParameterParser();
-            if (paramParser != null) {
-                arrArguments[i] = paramParser.parse(command, sender, lstArgs);
-            } else if (baseParsers.containsKey(argument.getType())) {
-                String value = lstArgs.remove(0);
-                arrArguments[i] = baseParsers.get(argument.getType()).parse(value);
-            }
-        }
-
         try {
+            for (int i = 0; i < arguments.length; i++) {
+                CommandArgument<?> argument = arguments[i];
+                arrArguments[i] = getArgumentValue(sender, command, argument, lstArgs);
+            }
             method.getMethod().invoke(method.getParent(), arrArguments);
+        } catch (ArgumentException e) {
+            sender.sendMessage(String.format("Not enough arguments, argument %s is missing!", e.getName()));
         } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
             e.printStackTrace();
-            return false;
         }
 
         return false;
     }
 
-    private Object handleArgument(CommandArgument<?> argument, ArrayList<String> args) {
+    private Object getArgumentValue(
+            @NotNull CommandSender sender,
+            @NotNull Command command,
+            CommandArgument<?> argument,
+            ArrayList<String> args
+    ) throws ArgumentException {
+        if (argument.isAutoInject()) {
+            if (argument.getType().equals(CommandSender.class)) {
+                return sender;
+            }
 
+            if (argument.getType().equals(Command.class)) {
+                return command;
+            }
+
+            if (argument.getType().isArray() && argument.getType().getComponentType().equals(String.class)) {
+                String[] arrArgs = args.toArray(new String[0]);
+                args.clear();
+                return arrArgs;
+            }
+
+            // todo get injection from command class?
+            return null;
+        }
+
+        if (args.size() == 0) {
+            if (!argument.isOptional()) {
+                // todo send not enough arguments message.
+                throw new ArgumentException("A required argument is not given.", argument.getName(), argument.getType());
+            }
+
+            return null;
+        }
+
+        if (argument.getOptions().length > 0) {
+            return getOptionValue(argument, args);
+        }
+
+        if (argument.getSelectors().length > 0) {
+            return getSelectorValue(argument, args);
+        }
+
+        ParameterParser<?> paramParser = argument.getParameterParser();
+        if (paramParser != null) {
+            return paramParser.parse(command, sender, args);
+        } else if (baseParsers.containsKey(argument.getType())) {
+            String value = args.remove(0);
+            return baseParsers.get(argument.getType()).parse(value);
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private Object getSelectorValue(CommandArgument<?> argument, ArrayList<String> args) {
+        Selector[] selectors = argument.getSelectors();
+        for (Selector selector : selectors) {
+            if (args.get(0).equals(selector.name())) {
+                args.remove(0);
+                int argsCount = args.size();
+                ParameterParser<?> parser = pluginBase.getCommandManager().getParser(selector.parameterType());
+                Object value = null;
+                if (parser != null) {
+                    value = parser.parse(args);
+                }
+
+                if (argsCount == args.size()) {
+                    args.remove(0);
+                }
+                return value;
+            }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private Object getOptionValue(CommandArgument<?> argument, ArrayList<String> args) {
+        Option[] options = argument.getOptions();
+        for (Option option : options) {
+            if (args.get(0).equals(option.name())) {
+                args.remove(0);
+                return pluginBase.getCommandManager().getOption(option.optionClass());
+            }
+        }
+
+        return null;
     }
 
 
