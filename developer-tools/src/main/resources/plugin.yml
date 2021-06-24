@@ -1,0 +1,17 @@
+name: DeveloperTools
+version: ${project.version}
+main: com.bubladecoding.developertools.DeveloperTools
+authors: [bublade]
+description: Tools for developer while developing plugins
+api-version: '1.13'
+commands:
+  test:
+    description: Test Command.
+  fly:
+    description: Test Command.
+  gimme:
+    description: Gimme command for getting items.
+    usage: gimme <material> [amount] [player]
+  permissions:
+    description: permission gommand
+    usage: permissions --help or -h for more info
