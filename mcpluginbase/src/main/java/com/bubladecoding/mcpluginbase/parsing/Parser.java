@@ -27,10 +27,23 @@ public interface Parser<T> {
 
     /**
      * Parse the string to the given type {@link T}.
+     *
      * @param arg The string to be parsed.
      * @return The parsed value.
      */
     @Nullable
     T parse(String arg);
+
+    /**
+     * Parse the string to the given type {@link T}.
+     *
+     * @param arg The string to be parsed.
+     * @param fallback Gets returned when the result of arg is null.
+     * @return The parsed value.
+     */
+    default T parse(String arg, T fallback) {
+        T value = parse(arg);
+        return value == null ? fallback : value;
+    }
 
 }

@@ -23,6 +23,7 @@ package com.bubladecoding.developertools.permissions.interfaces;
 
 import com.bubladecoding.developertools.permissions.PermissionValueType;
 import com.bubladecoding.developertools.permissions.actions.AddAction;
+import com.bubladecoding.developertools.permissions.actions.InfoAction;
 import com.bubladecoding.developertools.permissions.actions.RemoveAction;
 import com.bubladecoding.developertools.permissions.actions.SetAction;
 import com.bubladecoding.mcpluginbase.command.annotation.Option;
@@ -31,6 +32,7 @@ import org.bukkit.command.CommandSender;
 @Option(name = "add", optionClass = AddAction.class)
 @Option(name = "remove", optionClass = RemoveAction.class)
 @Option(name = "set", optionClass = SetAction.class)
+@Option(name = "info", optionClass = InfoAction.class)
 public interface IPermissibleAction {
 
     String getActionName();

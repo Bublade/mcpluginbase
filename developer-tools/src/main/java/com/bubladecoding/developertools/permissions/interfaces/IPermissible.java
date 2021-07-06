@@ -39,6 +39,7 @@ public interface IPermissible {
     void setGroups(IGroup group);
     void removeGroup(IGroup group);
     void setGroups(List<IGroup> groups);
+    List<IGroup> getGroups();
 
     Map<String, Boolean> getPermissions();
 

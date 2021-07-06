@@ -73,6 +73,11 @@ public class Group implements IGroup {
     }
 
     @Override
+    public List<IGroup> getGroups() {
+        return null;
+    }
+
+    @Override
     public Map<String, Boolean> getPermissions() {
         return new HashMap<>();
     }
