@@ -2,6 +2,7 @@ name: DeveloperTools
 version: ${project.version}
 main: com.bubladecoding.developertools.DeveloperTools
 authors: [bublade]
+softdepend: [McPluginBase]
 description: Tools for developer while developing plugins
 api-version: '1.13'
 commands:

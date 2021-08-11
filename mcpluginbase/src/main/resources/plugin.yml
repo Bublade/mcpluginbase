@@ -1,4 +1,4 @@
 name: McPluginBase
 version: ${project.version}
-main: com.bubladecoding.mcpluginbase.McPluginBase
-api-version: 1.13+
+main: com.bubladecoding.mcpluginbase.McPluginBaseSA
+api-version: '1.13'
