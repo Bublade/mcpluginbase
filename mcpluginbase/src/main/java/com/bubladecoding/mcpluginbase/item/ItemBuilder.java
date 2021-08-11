@@ -23,6 +23,7 @@ package com.bubladecoding.mcpluginbase.item;
 
 import com.bubladecoding.mcpluginbase.item.meta.ItemMetaBuilder;
 import com.bubladecoding.mcpluginbase.item.meta.MetaBuilder;
+import com.bubladecoding.mcpluginbase.item.meta.PersistentDataBuilder;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFactory;
@@ -31,6 +32,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.material.MaterialData;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -214,6 +216,14 @@ public class ItemBuilder {
     public ItemBuilder setDurability(short durability) {
         stack.setDurability(durability);
         return this;
+    }
+
+    /**
+     * Method for editing the persistent data directly.
+     * @return the {@link ItemBuilder} instance.
+     */
+    public PersistentDataBuilder editPersistentData(Plugin plugin) {
+        return new PersistentDataBuilder(this, plugin);
     }
 
     /**
