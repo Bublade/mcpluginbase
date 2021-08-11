@@ -21,8 +21,9 @@ package com.bubladecoding.developertools.permissions.interfaces;
  * SOFTWARE.
  */
 
-import org.bukkit.entity.Player;
+import java.util.UUID;
 
-public interface IUser extends Player, IPermissible {
+public interface IUser extends IPermissible {
 
+    UUID getUniqueId();
 }

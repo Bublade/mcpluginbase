@@ -24,27 +24,31 @@ package com.bubladecoding.developertools.permissions.permissibles;
 import com.bubladecoding.developertools.DeveloperToolsPlugin;
 import com.bubladecoding.developertools.permissions.interfaces.IGroup;
 import com.bubladecoding.developertools.permissions.interfaces.IUser;
-import com.bubladecoding.mcpluginbase.UserBase;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class User extends UserBase implements IUser {
+public class User implements IUser {
 
     private final DeveloperToolsPlugin plugin;
     private PermissionAttachment permissionAttachment;
+    private final Player playerBase;
 
     public User(DeveloperToolsPlugin plugin, Player playerBase) {
-        super(playerBase);
         this.plugin = plugin;
+        this.playerBase = playerBase;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 
     @Override
@@ -65,6 +69,11 @@ public class User extends UserBase implements IUser {
     @Override
     public void setGroups(List<IGroup> groups) {
 
+    }
+
+    @Override
+    public List<IGroup> getGroups() {
+        return null;
     }
 
     @Override
@@ -124,5 +133,10 @@ public class User extends UserBase implements IUser {
 
         permissionAttachment = info != null ? info.getAttachment() : playerBase.addAttachment(plugin);
         return permissionAttachment;
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return playerBase.getUniqueId();
     }
 }
