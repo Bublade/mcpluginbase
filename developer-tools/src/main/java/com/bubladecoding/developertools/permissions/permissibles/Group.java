@@ -32,8 +32,8 @@ import java.util.UUID;
 
 public class Group implements IGroup {
 
-    private final UUID uuid;
-    private final String name;
+    private UUID uuid;
+    private String name;
 
     public Group(String name) {
         this(UUID.randomUUID(), name);
@@ -48,10 +48,18 @@ public class Group implements IGroup {
         return uuid;
     }
 
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
     @Override
     public String getName() {
         return this.name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
     @Override
     public void addGroup(IGroup group) {
