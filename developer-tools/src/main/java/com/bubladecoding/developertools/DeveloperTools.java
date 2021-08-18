@@ -23,6 +23,7 @@ package com.bubladecoding.developertools;
 
 import com.bubladecoding.developertools.commands.FlyCommand;
 import com.bubladecoding.developertools.commands.test.*;
+import com.bubladecoding.developertools.database.SqlManager;
 import com.bubladecoding.developertools.events.MobEvents;
 import com.bubladecoding.developertools.managers.IGroupManager;
 import com.bubladecoding.developertools.managers.IUserManager;
@@ -34,6 +35,8 @@ import com.bubladecoding.developertools.permissions.interfaces.IUser;
 import com.bubladecoding.mcpluginbase.McPluginBase;
 import org.bukkit.plugin.ServicePriority;
 
+import java.sql.SQLException;
+
 public final class DeveloperTools extends McPluginBase implements DeveloperToolsPlugin {
 
     @Override
@@ -42,6 +45,11 @@ public final class DeveloperTools extends McPluginBase implements DeveloperTools
         getServer().getPluginManager().registerEvents(new MobEvents(), this);
 
         getServer().getServicesManager().register(IUserManager.class, new UserManager(this), this, ServicePriority.High);
+        SqlManager sqlManager = new HikariSqlManager(this);
+        sqlManager.openConnection();
+
+        getServer().getServicesManager().register(SqlManager.class, sqlManager, this, ServicePriority.High);
+
         getServer().getServicesManager().register(IGroupManager.class, new GroupManager(this), this, ServicePriority.High);
 
         getCommandManager().registerParser(IUser.class, UserParser.class);
