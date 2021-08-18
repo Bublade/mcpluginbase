@@ -23,7 +23,7 @@ package com.bubladecoding.developertools;
 
 import com.bubladecoding.developertools.managers.IGroupManager;
 import com.bubladecoding.developertools.permissions.interfaces.IGroup;
-import com.bubladecoding.developertools.permissions.permissibles.Group;
+import com.bubladecoding.developertools.database.group.Group;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

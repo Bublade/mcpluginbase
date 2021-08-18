@@ -22,10 +22,7 @@ package com.bubladecoding.developertools.permissions;
  */
 
 import com.bubladecoding.developertools.managers.IGroupManager;
-import com.bubladecoding.developertools.managers.IUserManager;
 import com.bubladecoding.developertools.permissions.interfaces.IGroup;
-import com.bubladecoding.developertools.permissions.interfaces.IUser;
-import com.bubladecoding.developertools.permissions.permissibles.Group;
 import com.bubladecoding.mcpluginbase.command.parser.ParameterParser;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

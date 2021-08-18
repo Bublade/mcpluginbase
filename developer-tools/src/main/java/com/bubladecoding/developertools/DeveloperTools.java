@@ -24,6 +24,7 @@ package com.bubladecoding.developertools;
 import com.bubladecoding.developertools.commands.FlyCommand;
 import com.bubladecoding.developertools.commands.test.*;
 import com.bubladecoding.developertools.database.SqlManager;
+import com.bubladecoding.developertools.database.user.UsersTable;
 import com.bubladecoding.developertools.events.MobEvents;
 import com.bubladecoding.developertools.managers.IGroupManager;
 import com.bubladecoding.developertools.managers.IUserManager;
@@ -32,6 +33,7 @@ import com.bubladecoding.developertools.permissions.PermissionsCommand;
 import com.bubladecoding.developertools.permissions.UserParser;
 import com.bubladecoding.developertools.permissions.interfaces.IGroup;
 import com.bubladecoding.developertools.permissions.interfaces.IUser;
+import com.bubladecoding.developertools.teststuff.UserCommand;
 import com.bubladecoding.mcpluginbase.McPluginBase;
 import org.bukkit.plugin.ServicePriority;
 
@@ -44,12 +46,21 @@ public final class DeveloperTools extends McPluginBase implements DeveloperTools
         // Plugin startup logic
         getServer().getPluginManager().registerEvents(new MobEvents(), this);
 
-        getServer().getServicesManager().register(IUserManager.class, new UserManager(this), this, ServicePriority.High);
         SqlManager sqlManager = new HikariSqlManager(this);
         sqlManager.openConnection();
 
         getServer().getServicesManager().register(SqlManager.class, sqlManager, this, ServicePriority.High);
 
+        try {
+            getServer().getServicesManager().register(
+                    UsersTable.class,
+                    new UsersTable(this, sqlManager.getConnection()),
+                    this, ServicePriority.High);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        getServer().getServicesManager().register(IUserManager.class, createInjectedClass(UserManager.class), this, ServicePriority.High);
         getServer().getServicesManager().register(IGroupManager.class, new GroupManager(this), this, ServicePriority.High);
 
         getCommandManager().registerParser(IUser.class, UserParser.class);
@@ -64,6 +75,8 @@ public final class DeveloperTools extends McPluginBase implements DeveloperTools
         getCommandManager().registerCommands(FlyCommand.class);
         getCommandManager().registerCommands(TestCommand.class);
         getCommandManager().registerCommands(PermissionsCommand.class);
+
+        getCommandManager().registerCommands(UserCommand.class);
     }
 
     @Override

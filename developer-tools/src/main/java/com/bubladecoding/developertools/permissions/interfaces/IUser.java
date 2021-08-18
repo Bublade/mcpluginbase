@@ -21,9 +21,17 @@ package com.bubladecoding.developertools.permissions.interfaces;
  * SOFTWARE.
  */
 
+import com.bubladecoding.mcpluginbase.database.IDed;
+
 import java.util.UUID;
 
-public interface IUser extends IPermissible {
+public interface IUser extends IPermissible, IDed<Long> {
 
     UUID getUniqueId();
+
+    void loadPlayer(UUID fromString);
+
+    String getNote();
+
+    void setNote(String note);
 }

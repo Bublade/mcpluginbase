@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.permissions.permissibles;
+package com.bubladecoding.developertools.database.group;
 /*
  * Copyright (c) 2021 bublade
  *

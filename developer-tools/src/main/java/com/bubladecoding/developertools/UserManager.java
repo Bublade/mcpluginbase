@@ -21,9 +21,10 @@
  */
 package com.bubladecoding.developertools;
 
+import com.bubladecoding.developertools.database.user.UsersTable;
 import com.bubladecoding.developertools.managers.IUserManager;
 import com.bubladecoding.developertools.permissions.interfaces.IUser;
-import com.bubladecoding.developertools.permissions.permissibles.User;
+import com.bubladecoding.developertools.database.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -36,10 +37,12 @@ import java.util.UUID;
 public class UserManager implements IUserManager {
 
     private final DeveloperToolsPlugin plugin;
+    private final UsersTable usersTable;
     private final Map<UUID, IUser> users;
 
-    public UserManager(DeveloperToolsPlugin plugin) {
+    public UserManager(DeveloperToolsPlugin plugin, UsersTable usersTable) {
         this.plugin = plugin;
+        this.usersTable = usersTable;
         this.users = new HashMap<>();
     }
 
@@ -78,6 +81,7 @@ public class UserManager implements IUserManager {
     @Override
     public void updateUser(@NotNull UUID uuid, @NotNull IUser user) {
         this.users.put(uuid, user);
+        usersTable.save(user);
     }
 
     @Nullable
@@ -91,9 +95,15 @@ public class UserManager implements IUserManager {
             return null;
         }
 
-        IUser user = new User(plugin, player);
-        // load more data here.
+        IUser user = usersTable.loadRaw("uuid = ?", player.getUniqueId().toString());
+
+        if (user == null) {
+            user = new User(plugin, player);
+            usersTable.save(user);
+        }
+
         this.users.put(user.getUniqueId(), user);
+
         return user;
     }
 }

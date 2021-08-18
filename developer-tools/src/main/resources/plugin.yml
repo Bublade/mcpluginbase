@@ -14,5 +14,8 @@ commands:
     description: Gimme command for getting items.
     usage: gimme <material> [amount] [player]
   permissions:
-    description: permission gommand
+    description: permission gommand.
     usage: permissions --help or -h for more info
+  user:
+    description: command for user actions.
+    usage: user --help or -h for more info

@@ -19,14 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.bubladecoding.developertools.database;
+package com.bubladecoding.developertools.database.user;
 
-import com.bubladecoding.developertools.permissions.permissibles.Group;
+import com.bubladecoding.developertools.permissions.interfaces.IUser;
+import com.bubladecoding.mcpluginbase.PluginBase;
 import com.bubladecoding.mcpluginbase.database.Table;
 
-public class GroupTable extends Table<Group> {
+import java.sql.Connection;
+import java.util.UUID;
 
-    public GroupTable() {
-        addField("name", new StringType(), Group::getName, Group::setName);
+public class UsersTable extends Table<IUser, Long> {
+
+    public UsersTable(PluginBase pluginBase, Connection connection) {
+        super(pluginBase, connection, "users", User.class, null);
+        addField("uuid", user -> user.getUniqueId().toString(), (user, uuid) -> user.loadPlayer(UUID.fromString(uuid)));
+        addField("note", IUser::getNote, IUser::setNote);
     }
 }

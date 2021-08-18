@@ -1,4 +1,4 @@
-package com.bubladecoding.developertools.permissions.permissibles;
+package com.bubladecoding.developertools.database.user;
 /*
  * Copyright (c) 2021 bublade
  *
@@ -24,6 +24,7 @@ package com.bubladecoding.developertools.permissions.permissibles;
 import com.bubladecoding.developertools.DeveloperToolsPlugin;
 import com.bubladecoding.developertools.permissions.interfaces.IGroup;
 import com.bubladecoding.developertools.permissions.interfaces.IUser;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -39,7 +40,9 @@ public class User implements IUser {
 
     private final DeveloperToolsPlugin plugin;
     private PermissionAttachment permissionAttachment;
-    private final Player playerBase;
+    private Player playerBase;
+    private Long id;
+    private String note;
 
     public User(DeveloperToolsPlugin plugin, Player playerBase) {
         this.plugin = plugin;
@@ -138,5 +141,30 @@ public class User implements IUser {
     @Override
     public UUID getUniqueId() {
         return playerBase.getUniqueId();
+    }
+
+    @Override
+    public void loadPlayer(UUID uuid) {
+        this.playerBase = Bukkit.getPlayer(uuid);
+    }
+
+    @Override
+    public Long getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getNote() {
+        return note;
+    }
+
+    @Override
+    public void setNote(String note) {
+        this.note = note;
     }
 }
