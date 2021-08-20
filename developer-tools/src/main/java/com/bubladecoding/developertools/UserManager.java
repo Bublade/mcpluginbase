@@ -95,7 +95,7 @@ public class UserManager implements IUserManager {
             return null;
         }
 
-        IUser user = usersTable.loadRaw("uuid = ?", player.getUniqueId().toString());
+        IUser user = usersTable.loadWhere("uuid = ?", player.getUniqueId().toString());
 
         if (user == null) {
             user = new User(plugin, player);

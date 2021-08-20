@@ -21,8 +21,8 @@
  */
 package com.bubladecoding.developertools.database.user;
 
+import com.bubladecoding.developertools.DeveloperToolsPlugin;
 import com.bubladecoding.developertools.permissions.interfaces.IUser;
-import com.bubladecoding.mcpluginbase.PluginBase;
 import com.bubladecoding.mcpluginbase.database.Table;
 
 import java.sql.Connection;
@@ -30,8 +30,8 @@ import java.util.UUID;
 
 public class UsersTable extends Table<IUser, Long> {
 
-    public UsersTable(PluginBase pluginBase, Connection connection) {
-        super(pluginBase, connection, "users", User.class, null);
+    public UsersTable(DeveloperToolsPlugin pluginBase, Connection connection) {
+        super(pluginBase, connection, "users", () -> new User(pluginBase, null), null);
         addField("uuid", user -> user.getUniqueId().toString(), (user, uuid) -> user.loadPlayer(UUID.fromString(uuid)));
         addField("note", IUser::getNote, IUser::setNote);
     }

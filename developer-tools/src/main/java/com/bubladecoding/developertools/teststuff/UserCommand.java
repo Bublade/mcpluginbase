@@ -22,7 +22,6 @@
 package com.bubladecoding.developertools.teststuff;
 
 import com.bubladecoding.developertools.DeveloperToolsPlugin;
-import com.bubladecoding.developertools.database.user.User;
 import com.bubladecoding.developertools.database.user.UsersTable;
 import com.bubladecoding.developertools.managers.IUserManager;
 import com.bubladecoding.developertools.permissions.interfaces.IUser;

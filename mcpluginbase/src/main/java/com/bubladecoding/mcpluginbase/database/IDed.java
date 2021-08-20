@@ -21,7 +21,9 @@
  */
 package com.bubladecoding.mcpluginbase.database;
 
-public interface IDed<T> {
+import java.lang.constant.ConstantDesc;
+
+public interface IDed<T extends ConstantDesc> {
 
     T getId();
 
