@@ -279,7 +279,7 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
      * @return Whether anything has been deleted.
      */
     public boolean delete(I idValue) {
-        return deleteWhere(idField.dbName + " ?", idValue);
+        return deleteWhere(idField.dbName + " = ?", idValue);
     }
 
     /**
