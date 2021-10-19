@@ -24,6 +24,8 @@ package com.bubladecoding.mcpluginbase.database;
 import com.bubladecoding.mcpluginbase.PluginBase;
 
 import java.lang.constant.ConstantDesc;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +39,7 @@ import java.util.function.Function;
  * @param <T> Type of the object this table manges.
  * @param <I> ID type of {@link T}
  */
-public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
+public abstract class Table<T extends IDed<I>, I extends ConstantDesc> {
 
     protected final PluginBase pluginBase;
     protected final Connection connection;
@@ -56,8 +58,8 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
      *
      * @param pluginBase The instance of a plugin extending pluginBase.
      * @param connection The connection with the database.
-     * @param tableName The name of the table.
-     * @param create Creation method used for loading.
+     * @param tableName  The name of the table.
+     * @param create     Creation method used for loading.
      */
     public Table(PluginBase pluginBase, Connection connection, String tableName, Callable<T> create) {
         this(pluginBase, connection, tableName, create, null);
@@ -68,9 +70,9 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
      *
      * @param pluginBase The instance of a plugin extending pluginBase.
      * @param connection The connection with the database.
-     * @param tableName The name of the table.
-     * @param create Creation method used for loading.
-     * @param idDefault The default value of ids.
+     * @param tableName  The name of the table.
+     * @param create     Creation method used for loading.
+     * @param idDefault  The default value of ids.
      */
     public Table(PluginBase pluginBase, Connection connection, String tableName, Callable<T> create, I idDefault) {
         this.pluginBase = pluginBase;
@@ -84,8 +86,8 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
      * Set the field that represents the id of the manged object type.
      * This by default will be 'id'.
      *
-     * @param get The get {@link Function} to retrieve the id from the object.
-     * @param set The set {@link BiConsumer} to set the id of the object.
+     * @param get       The get {@link Function} to retrieve the id from the object.
+     * @param set       The set {@link BiConsumer} to set the id of the object.
      * @param idDefault The default value for the id field.
      */
     protected void setIdField(Function<T, I> get, BiConsumer<T, I> set, I idDefault) {
@@ -97,9 +99,9 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
      * Set the field that represents the id of the manged object type.
      * This by default will be 'id'.
      *
-     * @param dbName name of the column in the database.
-     * @param get The get {@link Function} to retrieve the id from the object.
-     * @param set The set {@link BiConsumer} to set the id of the object.
+     * @param dbName    name of the column in the database.
+     * @param get       The get {@link Function} to retrieve the id from the object.
+     * @param set       The set {@link BiConsumer} to set the id of the object.
      * @param idDefault The default value for the id field.
      */
     protected void setIdField(String dbName, Function<T, I> get, BiConsumer<T, I> set, I idDefault) {
@@ -112,9 +114,9 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
      * This by default will be 'id'.
      *
      * @param dbName name of the column in the database.
-     * @param get The get {@link Function} to retrieve the value from the object.
-     * @param set The set {@link BiConsumer} to set the id of the object.
-     * @param <R> Type to make restrict the {@param get} and {@param set} to the same type.
+     * @param get    The get {@link Function} to retrieve the value from the object.
+     * @param set    The set {@link BiConsumer} to set the id of the object.
+     * @param <R>    Type to make restrict the {@param get} and {@param set} to the same type.
      */
     protected <R> void addField(String dbName, Function<T, R> get, BiConsumer<T, R> set) {
         fields.add(new DBField<>(dbName, get, set));
@@ -155,7 +157,7 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
     /**
      * Load from the table based on a where statement.
      *
-     * @param sqlWhere The where statement to use (without 'where').
+     * @param sqlWhere        The where statement to use (without 'where').
      * @param preparedObjects The objects to inject.
      * @return The loaded object.
      */
@@ -166,7 +168,7 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
     /**
      * Load from the table based on a where statement.
      *
-     * @param sqlWhere The where statement to use (without 'where').
+     * @param sqlWhere        The where statement to use (without 'where').
      * @param preparedObjects The objects to inject.
      * @return The loaded object.
      */
@@ -234,7 +236,7 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
     /**
      * Load a list of objects based on the where statement.
      *
-     * @param sqlWhere The where statement (without 'where').
+     * @param sqlWhere        The where statement (without 'where').
      * @param preparedObjects The objects to inject.
      * @return The list of loaded objects.
      */
@@ -245,7 +247,7 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
     /**
      * Load a list of objects based on the where statement.
      *
-     * @param sqlWhere The where statement (without 'where').
+     * @param sqlWhere        The where statement (without 'where').
      * @param preparedObjects The objects to inject.
      * @return The list of loaded objects.
      */
@@ -295,7 +297,7 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
     /**
      * Delete from the table based on a where statement.
      *
-     * @param sqlWhere The where statement to use (without 'where').
+     * @param sqlWhere        The where statement to use (without 'where').
      * @param preparedObjects The objects to inject.
      * @return Whether anything has been deleted.
      */
@@ -306,7 +308,7 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
     /**
      * Delete from the table based on a where statement.
      *
-     * @param sqlWhere The where statement to use (without 'where').
+     * @param sqlWhere        The where statement to use (without 'where').
      * @param preparedObjects The objects to inject.
      * @return Whether anything has been deleted.
      */
@@ -372,9 +374,21 @@ public abstract class Table<T extends IDed<I>, I extends  ConstantDesc> {
 
     private <R extends T> void setValues(R instance, ResultSet resultSet) throws SQLException {
         for (DBField<T, ?> field : this.fields) {
-            field.setValue(instance, resultSet.getObject(field.dbName));
+            field.setValue(instance, convertValue(resultSet.getObject(field.dbName)));
         }
-        idField.setValue(instance, resultSet.getObject(idField.dbName));
+        idField.setValue(instance, convertValue(resultSet.getObject(idField.dbName)));
+    }
+
+    private Object convertValue(Object value) {
+        if (value instanceof BigDecimal bigDecimal) {
+            return bigDecimal.doubleValue();
+        }
+
+        if (value instanceof BigInteger bigInteger) {
+            return bigInteger.longValue();
+        }
+
+        return value;
     }
 
     private T createNew() {
