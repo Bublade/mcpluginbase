@@ -337,7 +337,7 @@ public abstract class Table<T extends IDed<I>, I extends ConstantDesc> {
                 statement.setObject(i, fields.get(i - 1).getValue(object));
             }
 
-            statement.executeQuery();
+            statement.executeUpdate();
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -364,7 +364,7 @@ public abstract class Table<T extends IDed<I>, I extends ConstantDesc> {
             }
 
             statement.setObject(fields.size() + 1, idField.getValue(object));
-            statement.executeQuery();
+            statement.executeUpdate();
             return true;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
